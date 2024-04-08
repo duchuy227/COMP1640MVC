@@ -50,17 +50,22 @@
                                     <td >
                                         <button class="btn btn-success">
                                             <a style="text-decoration: none; color:#fff"  
-                                            href="#"><i class="bi bi-pencil-square"></i></a> 
+                                            href="index.php?action=coordinator_update_contribution&id=<?php echo $contribution['Con_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
+                                        </button>
+
+                                        <button class="btn btn-primary">
+                                            <a style="text-decoration: none; color:#fff"
+                                            href="index.php?action=coordinator_contribution_detail&id=<?php echo $contribution['Con_ID'] ?>"><i class="bi bi-files"></i></a>
                                         </button>
 
                                         <button class="btn btn-danger">
                                             <a style="text-decoration: none; color:#fff" 
-                                            href="#" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
+                                            href="index.php?action=delete_contribution&id=<?php echo $contribution['Con_ID']; ?>" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
                                         </button>
 
-                                        <button class="btn btn-success">
+                                        <button class="btn btn-secondary">
                                             <a style="text-decoration: none; color:#fff"  
-                                            href="#"><i class="bi bi-chat-left"></i></a> 
+                                            href="index.php?action=coordinator_add_comment&id=<?php echo $contribution['Con_ID']; ?>"><i class="bi bi-chat-left"></i></a> 
                                         </button>
                                     </td>
                                 </tr>

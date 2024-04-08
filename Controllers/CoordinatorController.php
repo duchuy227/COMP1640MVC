@@ -9,6 +9,7 @@
 
         private  $is_login;
         public function __construct() {
+            $this->model = new CoordinatorModel();
             $usercontroller = new UserController();
             $this->is_login = $usercontroller->is_login();
         }
@@ -143,6 +144,116 @@
             }
         }
 
+        public function coor_update_contribution($id){
+            if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
+                $coordinatorModel = new CoordinatorModel();
+                $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
+
+                $contribution = $coordinatorModel ->getContributionByID($id);
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $status = $_POST['status'];
+                    $success = $coordinatorModel ->updateContributionStatus($id, $status);
+                    header('Location: index.php?action=coordinator_contribution');
+                }
+
+                include 'views/coordinator_update_contribution.php';
+
+            }
+        }
+
+        public function coor_contribution_detail($id){
+            if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
+                $coordinatorModel = new CoordinatorModel();
+                $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
+
+                $contribution = $coordinatorModel ->getContributionDetail($id);;
+
+                include 'views/coordinator_contribution_detail.php';
+            }
+        }
+
+        public function viewdocx($id){
+            $coordinatorModel = new CoordinatorModel();
+            $contribution = $coordinatorModel->getContributionByID($id);
+            
+            $docxFilePath = $contribution['Con_Doc'];
+            $image = $contribution['Con_Image'];
+            
+            // Sử dụng PHPWord để tải tệp DOCX
+            require 'vendor/autoload.php';
+            // Tải tệp DOCX
+            $phpWord = IOFactory::load($docxFilePath);
+            // Trích xuất tất cả các hình ảnh từ tệp DOCX
+            // Lấy nội dung của tệp DOCX dưới dạng HTML
+            $html = '';
+            foreach ($phpWord->getSections() as $section) {
+                foreach ($section->getElements() as $element) {
+                    if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                        // Xử lý phần tử TextRun
+                        foreach ($element->getElements() as $textElement) {
+                            if ($textElement instanceof \PhpOffice\PhpWord\Element\Text) {
+                                // Xử lý phần tử Text
+                                $html .= $textElement->getText();
+                            } elseif ($textElement instanceof \PhpOffice\PhpWord\Element\TextBreak) {
+                                // Xử lý phần tử TextBreak
+                                $html .= "<br>";
+                            }
+                        }
+                    }
+                }
+            }
+        
+            include 'views/showDoc1.php';
+        }
+
+        public function add_comment($id) {
+            ob_start();
+        
+            if(isset($_SESSION['is_login']) && $_SESSION['is_login'] == true && $_SESSION['role_id'] == 4) {
+                // Khởi tạo model
+                $coordinatorModel = new CoordinatorModel();
+        
+                $contribution = $coordinatorModel->getContributionById($id);
+        
+                
+        
+                // Xử lý khi form được submit
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    // Lấy dữ liệu từ form
+                    $Com_Detail = $_POST['Com_Detail'];
+                    $Con_ID = $_POST['Con_ID'];
+                    $Coor_ID = $_SESSION['userid'];
+
+                    $check = $this->model->checkDate($Con_ID);
+        
+                    if($check == true) {
+
+                        $this->model->addComment($Com_Detail, $Con_ID, $Coor_ID);
+                        $this->model->changeStatus($Con_ID);
+
+                        header('location: index.php?action=coordinator_contribution');
+                        exit;
+                    } else {
+                        
+                    }
+                } include "views/coordinator_add_cmt.php";
+            }
+            ob_end_flush();
+        }
+
+        public function delete($id){
+                $user = new UserController();
+                $is_login = $user->is_login();
+                if ($is_login == true && $_SESSION['role_id'] == 4 ) {
+                    $coordinatorModel = new CoordinatorModel();
+                    $coordinatorModel->deleteContribution($id);
+                    header('Location: index.php?action=coordinator_contribution');
+                    exit();
+                }
+        }
+        
+
         public function coordinator_mail(){
             if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
                 $coordinatorModel = new CoordinatorModel();
@@ -153,29 +264,6 @@
         }
     }  
 
-    //     public function add_comment($id) {  
-    //         ob_start() ;
-    //        //if(isset($_SESSION['is_login']) && $_SESSION['is_login'] == true && $_SESSION['role_id']==4){
-    //         $con = new ContributionModel();
-    //         $contribution = $con->getContributionById($id);
-    //         require_once "views/contri_add_cmt.php" ;
-    //         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    //             $Com_Detail = $_POST['Com_Detail'];
-    //             $Con_ID = $_POST['Con_ID'];
-    //             $Coor_ID = $_SESSION['userid'];
-    //             $check = $this->model->checkDate($Con_ID);
-    //             if($check == true) {
-    //             $this->model->addComment($Com_Detail,$Con_ID,$Coor_ID);
-    //             $this->model->changeStatus($Con_ID);
-    //             header('location: index.php?action=contribution');
-    //             exit;
-    //             } else {
-    
-    //             }
-    //         }
-    //   //  }
-    //         ob_end_flush() ;
-    //     }
     // public function download() {  
     //     $zip = new ZipArchive();
     //     $download = $this->model->download();

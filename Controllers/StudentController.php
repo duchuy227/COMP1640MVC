@@ -298,7 +298,7 @@ include 'PHPMailer/src/SMTP.php';
                 }
             include 'views/student_update_contribution.php';
             
-    }
+        }
     }
 
     public function student_delete_contribution($id){

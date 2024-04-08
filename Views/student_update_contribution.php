@@ -67,7 +67,7 @@
         }
     </style>
 <body>
-    <!-- <?php include 'Layout/student_sidebar.php' ?> -->
+    <?php include 'Layout/student_sidebar.php' ?>
 
     <section id="content">
         <?php include 'Layout/student_navbar.php' ?>
@@ -114,7 +114,7 @@
                         </div>
                         
                         <div style="display: flex; align-items: center;" class="form-group">
-                            <input type="checkbox" name="" id="">
+                            <input type="checkbox" name="" id="" required>
                             <label class="label" style="color:#333; font-size: 18px; font-weight: 100" for="">
                                 <a style="color:#333; text-decoration:none" href="index.php?action=student_conditional">&nbsp;Agree to the terms and conditions</a>
                             </label>

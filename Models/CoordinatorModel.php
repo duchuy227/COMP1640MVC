@@ -78,6 +78,37 @@
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        public function getContributionByID($id)
+        {
+            $query = "SELECT * FROM contribution s WHERE Con_ID= :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id'=> $id));
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function getContributionDetail($con_id) {
+            $query = "SELECT Contribution.*, Topic.Topic_Name, 
+                    CASE WHEN Contribution.Con_Status = 'Approval' THEN Comments.Com_Detail
+                    ELSE ''
+                    END AS Com_Detail
+                    FROM Contribution
+                    LEFT JOIN Topic ON Contribution.Topic_ID = Topic.Topic_ID
+                    LEFT JOIN Comments ON Contribution.Con_ID = Comments.Con_ID
+                    WHERE Contribution.Con_ID = :con_id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':con_id' => $con_id));
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+
+
+        public function updateContributionStatus($con_id, $status) {
+            $query = "UPDATE Contribution SET Con_Status = :status WHERE Con_ID = :con_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':con_id', $con_id);
+            return $stmt->execute();
+        }
+
         public function updateStudentAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id,$imageData)
         {
             $query = "UPDATE Student SET Stu_Username = :username, Stu_Password = :password, Stu_Email = :email, Stu_FullName = :fullname, Stu_DOB = :dob, Role_ID = :role_id, Fa_ID = :fa_id ,Image= :imageData WHERE Stu_ID = :id";
@@ -108,6 +139,12 @@
             } else {
                 return false;
             }
+        }
+
+        public function deleteContribution($id) {
+            $query = "DELETE FROM contribution WHERE Con_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id' => $id));
         }
         //////////////////
         public function download(){

@@ -99,7 +99,7 @@
                         <div class="form-group">
                             <label for="cars">Choose Topic:</label>
                             
-                            <select name="Topic_ID" >
+                            <select class="form-control" name="Topic_ID" >
                                 <?php foreach ($topic as $topics) : ?>
                                 <option value="<?php echo $topics['Topic_ID'] ?>"> <?php echo $topics['Topic_Name'] ?> </option>
                                 <?php endforeach ; ?>
@@ -107,7 +107,7 @@
                         </div>
 
                         <div style="display: flex; align-items: center;" class="form-group">
-                            <input type="checkbox" name="" id="">
+                            <input type="checkbox" name="" id="" required>
                             <label class="label" style="color:#333; font-size: 18px; font-weight: 100" for="">
                                 <a style="color:#333; text-decoration:none" href="index.php?action=student_conditional">&nbsp;Agree to the terms and conditions</a>
                             </label>

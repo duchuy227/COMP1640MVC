@@ -236,23 +236,36 @@ switch ($action) {
             $CoordinatorController = new CoordinatorController();
             $CoordinatorController->coordinator_mail();
             break;
+        
+        case 'coordinator_update_contribution':
+            require_once 'Controllers/CoordinatorController.php';
+            $CoordinatorController = new CoordinatorController();
+            $CoordinatorController -> coor_update_contribution($_GET['id']);
+            break;
+        
+        case 'coordinator_contribution_detail':
+            require_once 'Controllers/CoordinatorController.php';
+            $CoordinatorController = new CoordinatorController();
+            $CoordinatorController -> coor_contribution_detail($_GET['id']);
+            break;
+        
+        case 'viewdocx':
+            require_once 'Controllers/CoordinatorController.php';
+            $CoordinatorController = new CoordinatorController();
+            $CoordinatorController -> viewdocx($_GET['id']);
+            break;
 
-        // case 'contribution':
-        //     require_once 'Controllers/ContributionController.php';
-        //     $contributionController = new ContributionController();
-        //     $contributionController->index();
-        //     break;      
-        // case 'cmt_contribution':
-        //     require_once 'Controllers/ContributionController.php';
-        //     $contributionController = new ContributionController();
-        //     $contributionController->edit($_GET['id']);
-        //     break;
-            
-        // case 'delete_contribution':
-        //     require_once 'Controllers/ContributionController.php';
-        //     $contributionController = new ContributionController();
-        //     $contributionController->delete($_GET['id']);
-        //     break;
+        case 'coordinator_add_comment':
+            require_once 'Controllers/CoordinatorController.php';
+            $CoordinatorController = new CoordinatorController();
+            $CoordinatorController->add_comment($_GET['id']);
+            break;
+
+        case 'delete_contribution':
+            require_once 'Controllers/CoordinatorController.php';
+            $CoordinatorController = new CoordinatorController();
+            $CoordinatorController->delete($_GET['id']);
+            break;
 
         
         // manager    
