@@ -219,11 +219,11 @@ switch ($action) {
             $CoordinatorController->coordinator_edit_profile();
             break;
         
-        case 'coordinator_edit_student':
-            require_once 'Controllers/CoordinatorController.php';
-            $CoordinatorController = new CoordinatorController();
-            $CoordinatorController->coordinator_edit_student($_GET['id']);
-            break;
+        // case 'coordinator_edit_student':
+        //     require_once 'Controllers/CoordinatorController.php';
+        //     $CoordinatorController = new CoordinatorController();
+        //     $CoordinatorController->coordinator_edit_student($_GET['id']);
+        //     break;
         
         case 'coordinator_contribution':
             require_once 'Controllers/CoordinatorController.php';

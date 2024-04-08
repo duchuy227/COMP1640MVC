@@ -427,9 +427,6 @@ include 'PHPMailer/src/SMTP.php';
             </div>
             </body>
             </html>
-            
-            
-            
             ';   
             $mail->send();
             // echo 'Message has been sent';

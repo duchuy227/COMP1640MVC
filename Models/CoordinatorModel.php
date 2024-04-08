@@ -146,6 +146,21 @@
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':id' => $id));
         }
+
+
+        public function sendMail($stuID, $coorID, $content) {
+            $query = "INSERT INTO mail (Stu_ID, Coor_ID, Content) 
+                      VALUES (:Stu_ID, :Coor_ID, :content)";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':Stu_ID' => $stuID, ':Coor_ID' => $coorID, ':content' => $content));
+        }
+
+        public function getStudentById($studentID) {
+            $query = "SELECT * FROM Student WHERE Stu_ID = :studentID";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':studentID' => $studentID));
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
         //////////////////
         public function download(){
             $query = "SELECT * FROM contribution WHERE Con_Status = 'Approval'";

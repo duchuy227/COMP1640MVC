@@ -38,20 +38,20 @@
 						<thead>
 							<tr>
 								<th>Contribution</th>
-								<th>Date Time</th>
+								<th>Student's Name</th>
 								<th>Status</th>
 							</tr>
 						</thead>
 						<tbody>
+						<?php foreach($contribution as $contribution): ?>
 							<tr>
 								<td>
-            
-									<p>Huy Ho</p>
+									<p><?php echo $contribution['Con_Name'] ?></p>
 								</td>
-								<td>01-10-2023</td>
-								<td><span class="status pending">Pending</span></td>
+								<td><?php echo $contribution['Stu_FullName'] ?></td>
+								<td><span><?php echo $contribution['Con_Status'] ?></span></td>
 							</tr>
-							
+						<?php endforeach; ?>
 						</tbody>
 					</table>
 				</div>

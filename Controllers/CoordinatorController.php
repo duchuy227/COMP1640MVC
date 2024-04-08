@@ -1,7 +1,13 @@
 <?php
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
     require_once 'Models/CoordinatorModel.php';
     require_once 'UserController.php';
     use PhpOffice\PhpWord\IOFactory;
+    include 'PHPMailer/src/Exception.php';
+    include 'PHPMailer/src/PHPMailer.php';
+    include 'PHPMailer/src/SMTP.php';
 
     class CoordinatorController {
 
@@ -24,6 +30,8 @@
                 // $coor_ID = $_SESSION['fa_id'];
                 $fa_id = $coorInfo['Fa_ID'];
                 $students = $coordinatorModel ->getAllStudentByCoordinator($fa_id);
+
+                $contribution = $coordinatorModel->getAllContributionByFaculty($fa_id);
 
                 include 'views/coordinator_index.php';
             }
@@ -95,39 +103,39 @@
             
         }
 
-        public function coordinator_edit_student($id){
-            if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
-                $coordinatorModel = new CoordinatorModel();
-                $coorInfo = $coordinatorModel->getCoordinatorbyUserName($_SESSION['username']);
-                $faculty = $coordinatorModel->getAllFaculty();
+        // public function coordinator_edit_student($id){
+        //     if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
+        //         $coordinatorModel = new CoordinatorModel();
+        //         $coorInfo = $coordinatorModel->getCoordinatorbyUserName($_SESSION['username']);
+        //         $faculty = $coordinatorModel->getAllFaculty();
                 
-                // Xử lý cập nhật thông tin sinh viên
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    // Xử lý tải ảnh mới hoặc sử dụng ảnh hiện tại
-                    if (isset($_FILES["new_avatar"]) && !empty($_FILES["new_avatar"]["tmp_name"])) { 
-                        $file = $_FILES["new_avatar"];
-                        $imageData = file_get_contents($file["tmp_name"]);          
-                    } else {
-                        $image = $_POST["avatar"];
-                        $imageData = base64_decode($image);                  
-                    }
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
-                    $email = $_POST['email'];
-                    $fullname = $_POST['fullname'];
-                    $dob = $_POST['dob'];
-                    $roleId = $_POST['role_id'];
-                    $fa_id = $_POST['fa_id'];
+        //         // Xử lý cập nhật thông tin sinh viên
+        //         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //             // Xử lý tải ảnh mới hoặc sử dụng ảnh hiện tại
+        //             if (isset($_FILES["new_avatar"]) && !empty($_FILES["new_avatar"]["tmp_name"])) { 
+        //                 $file = $_FILES["new_avatar"];
+        //                 $imageData = file_get_contents($file["tmp_name"]);          
+        //             } else {
+        //                 $image = $_POST["avatar"];
+        //                 $imageData = base64_decode($image);                  
+        //             }
+        //             $username = $_POST['username'];
+        //             $password = $_POST['password'];
+        //             $email = $_POST['email'];
+        //             $fullname = $_POST['fullname'];
+        //             $dob = $_POST['dob'];
+        //             $roleId = $_POST['role_id'];
+        //             $fa_id = $_POST['fa_id'];
         
-                    // Thực hiện cập nhật thông tin sinh viên
-                    $coordinatorModel->updateStudentAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id, $imageData);
-                    header('Location: index.php?action=coordinator_student');
-                    exit();
-                }
+        //             // Thực hiện cập nhật thông tin sinh viên
+        //             $coordinatorModel->updateStudentAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id, $imageData);
+        //             header('Location: index.php?action=coordinator_student');
+        //             exit();
+        //         }
                 
-                include 'views/coordinator_edit_student.php';
-            } 
-        }
+        //         include 'views/coordinator_edit_student.php';
+        //     } 
+        // }
 
         public function coordinator_contribution(){
             if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
@@ -257,11 +265,205 @@
         public function coordinator_mail(){
             if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
                 $coordinatorModel = new CoordinatorModel();
-                $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
-
+                $coorInfo = $coordinatorModel->getCoordinatorbyUserName($_SESSION['username']);
+                $fa_id = $coorInfo['Fa_ID'];
+                $students = $coordinatorModel->getAllStudentByCoordinator($fa_id);
+        
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $title = $_POST['title'];
+                    $content = $_POST['content'];
+                    $selectedStudents = $_POST['studentID']; // Sửa tên của biến để phù hợp với tên trong form
+        
+                    if (!empty($selectedStudents)) {
+                        // Kiểm tra xem người dùng đã chọn gửi cho tất cả sinh viên hay không
+                        if ($selectedStudents == 'All') {
+                            // Gửi email cho tất cả sinh viên trong khoa
+                            foreach ($students as $student) {
+                                $coordinatorModel->sendMail($student, $coorInfo['Coor_ID'], $content);
+                            }
+                            $this->mailToAllStudent($content, $title, $coorInfo);
+                        } else {
+                            // Gửi email cho từng sinh viên được chọn
+                            foreach ($selectedStudents as $studentID) {
+                                $coordinatorModel->sendMail($studentID, $coorInfo['Coor_ID'], $content);
+                                // Lấy thông tin sinh viên từ ID và gửi email
+                                $student = $coordinatorModel->getStudentById($studentID);
+                                $this->mailSingleStudent($student, $content, $title, $coorInfo);
+                            }
+                        }
+                    } else {
+                        // Gửi email cho tất cả sinh viên trong khoa nếu không có sinh viên được chọn
+                        foreach ($students as $student) {
+                            $coordinatorModel->sendMail($student['Stu_ID'], $coorInfo['Coor_ID'], $content);
+                        }
+                        $this->mailToAllStudent($content, $title, $coorInfo);
+                    }
+        
+                    // Chuyển hướng sau khi gửi email
+                    header('location: index.php?action=coordinator_index');
+                    exit;
+                }
+        
                 include 'views/coordinator_mail.php';
             }
         }
+        
+
+        public function mailSingleStudent($student, $content, $title, $coorInfo){
+            $mail = new PHPMailer(true);
+            try {
+                //Server settings
+                $mail->SMTPDebug = 0;
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'leduchuy22072002@gmail.com';
+                $mail->Password   = 'utkziciechiujjxy';
+                $mail->Port       = 587;
+        
+                //Recipients
+                $mail->setFrom('leduchuy22072002@gmail.com', $coorInfo['Coor_FullName']);
+                $mail->addAddress('huyldgbh200353@fpt.edu.vn');  // Thay đổi địa chỉ email tại đây
+        
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = 'New Coordinator Mail';
+                $mail->Body    = '
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+                    <style>
+        
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                        box-sizing:border-box;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #fff;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+                    h1 {
+                        color: #8B008B;
+                        text-align: center;
+                    }
+                    p {
+                        color: #333;
+                        font-size: 18px;
+                    }
+                    span {
+                        color: #4B0082;
+                        font-size: 17px;
+                    }
+                    </style>
+                    </head>
+                    <body>
+                    <div class="container">
+                        <h1>New Coordinator Mail</h1>
+                        <p>Dear Student: <strong>' . $student['Stu_FullName'] . '</strong></p>
+                        <p>My name is <strong>' . $coorInfo['Coor_FullName'] . '</strong></p>
+                        <p> Title: <strong>' .$title.' </strong></p>
+                        <p> Content: <strong>' .$content.' </strong></p>
+                        <span>I hope student can reply as soon as possible</span>
+                    </div>
+                    </body>
+                    </html>
+                ';   
+                $mail->send();
+                // echo 'Message has been sent';
+            } catch (Exception $e) {
+        
+            }
+        }
+
+
+        public function mailToAllStudent($content, $title, $coorInfo){
+            $mail = new PHPMailer(true);
+            try {
+                //Server settings
+                $mail->SMTPDebug = 0;
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'leduchuy22072002@gmail.com';
+                $mail->Password   = 'utkziciechiujjxy';
+                $mail->Port       = 587;
+        
+                //Recipients
+                $mail->setFrom('leduchuy22072002@gmail.com', $coorInfo['Coor_FullName']);
+                $mail->addAddress('huyldgbh200353@fpt.edu.vn');  // Thay đổi địa chỉ email tại đây
+        
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = 'New Coordinator Mail';
+                $mail->Body    = '
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+                    <style>
+        
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                        box-sizing:border-box;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #fff;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+                    h1 {
+                        color: #8B008B;
+                        text-align: center;
+                    }
+                    p {
+                        color: #333;
+                        font-size: 18px;
+                    }
+                    span {
+                        color: #4B0082;
+                        font-size: 17px;
+                    }
+                    </style>
+                    </head>
+                    <body>
+                    <div class="container">
+                        <h1>New Coordinator Mail</h1>
+                        <p>Dear All Student,</p>
+                        <p>My name is <strong>' . $coorInfo['Coor_FullName'] . '</strong></p>
+                        <p> Title: <strong>' .$title.' </strong></p>
+                        <p> Content: <strong>' .$content.' </strong></p>
+                        <span>I hope student can reply as soon as possible</span>
+                    </div>
+                    </body>
+                    </html>
+                ';   
+                $mail->send();
+                // echo 'Message has been sent';
+            } catch (Exception $e) {
+        
+            }
+        }
+        
+        
+        
     }  
 
     // public function download() {  

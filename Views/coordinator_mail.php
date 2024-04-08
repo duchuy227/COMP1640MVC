@@ -34,6 +34,15 @@
                         <label for="">Description</label>
                         <textarea type="text" class="form-control" id="" name="content" required></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="studentID">Select Student</label>
+                        <select class="form-control" id="studentID" name="studentID[]">
+                            <option value="" hidden>Select Student</option>
+                            <?php foreach ($students as $student): ?>
+                                <option value="<?php echo $student['Stu_ID']; ?>"><?php echo $student['Stu_FullName']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-success">Send Email</button>
                     </form>
                 </div>
