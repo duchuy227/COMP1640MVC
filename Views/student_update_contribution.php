@@ -89,7 +89,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Description</label>
-                            <textarea type="text" class="form-control" id="" name="Con_Description"value="<?php echo $contribution['Con_Description'] ?>" required></textarea>
+                            <textarea class="form-control" id="" name="Con_Description" required><?php echo $contribution['Con_Description']; ?></textarea>
                         </div>
                         
                         <div class="form-group">
@@ -102,12 +102,12 @@
                             <div class="form-group">
                             <input type="file"  id="" name="New_Con_Doc" value=<?php echo $contribution['Con_Doc'] ?> required >
                         </div>
-                           
+                        
                         </div>
                         <div class="form-group">
                             <label for="">Image</label>
                             <div class="form-group">
-                                <?php echo '<img  src="data:image/*;base64,' . base64_encode($contribution['Con_Image']) . '" />'; ?>
+                                <?php echo '<img width="200"  src="data:image/*;base64,' . base64_encode($contribution['Con_Image']) . '" />'; ?>
                             </div>  
                             <input type="hidden" id="" name="Con_Image" value="<?php echo base64_encode($contribution['Con_Image']) ?> "required >
                             <input type="file" id="" name="New_Image"  required >

@@ -61,7 +61,7 @@
         }
     </style>
 <body>
-    <!-- <?php include 'Layout/student_sidebar.php' ?> -->
+    <?php include 'Layout/student_sidebar.php' ?>
 
     <section id="content">
         <?php include 'Layout/student_navbar.php' ?>
