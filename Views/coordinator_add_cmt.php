@@ -45,14 +45,20 @@
 
                         <div class="form-group">
                             <label for="Com_ID">Comment</label>
-                            <textarea class="form-control" type="text" name="Com_Detail" id="Com_ID"  required></textarea>
+                            <textarea class="form-control" type="text" name="Com_Detail" id="Com_ID" cols="30" rows="10"  required></textarea>
+                            <script src="./ckeditor/ckeditor.js"></script>
+                            <script>
+                                CKEDITOR.replace("Com_Detail");                              
+                            </script>
                         </div>
 
-                        <input class="btn btn-success" type="submit" value="Lưu">
+                        <input class="btn btn-success" type="submit" value="Comment">
                     </form>
                 </div>
             </div>
         </main>
     </section>
+
+    
 </body>
 </html>

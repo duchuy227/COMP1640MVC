@@ -223,13 +223,10 @@
                 $coordinatorModel = new CoordinatorModel();
         
                 $contribution = $coordinatorModel->getContributionById($id);
-        
-                
-        
                 // Xử lý khi form được submit
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Lấy dữ liệu từ form
-                    $Com_Detail = $_POST['Com_Detail'];
+                    $Com_Detail = strip_tags($_POST['Com_Detail']);
                     $Con_ID = $_POST['Con_ID'];
                     $Coor_ID = $_SESSION['userid'];
 
