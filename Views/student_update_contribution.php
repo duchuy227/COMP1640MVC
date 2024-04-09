@@ -90,6 +90,10 @@
                         <div class="form-group">
                             <label for="">Description</label>
                             <textarea class="form-control" id="" name="Con_Description" required><?php echo $contribution['Con_Description']; ?></textarea>
+                            <script src="./ckeditor/ckeditor.js"></script>
+                            <script>
+                                CKEDITOR.replace("Con_Description");                              
+                            </script>
                         </div>
                         
                         <div class="form-group">
@@ -99,8 +103,11 @@
                         <div class="form-group">
                             <label for="">Document</label>
                             <input type="hidden"  id="" name="Con_Doc" value=<?php echo $contribution['Con_Doc'] ?> required >
+                            <button class="btn btn-secondary">
+                                <a style="text-decoration: none; color:#fff" href="index.php?action=viewdoc&id=<?php echo $id ?>">View Document</a>
+                            </button>
                             <div class="form-group">
-                            <input type="file"  id="" name="New_Con_Doc" value=<?php echo $contribution['Con_Doc'] ?> required >
+                            <input type="file"  id="" name="New_Con_Doc" value=<?php echo $contribution['Con_Doc'] ?> required accept=".doc,.docx" multiple>
                         </div>
                         
                         </div>
@@ -110,7 +117,7 @@
                                 <?php echo '<img width="200"  src="data:image/*;base64,' . base64_encode($contribution['Con_Image']) . '" />'; ?>
                             </div>  
                             <input type="hidden" id="" name="Con_Image" value="<?php echo base64_encode($contribution['Con_Image']) ?> "required >
-                            <input type="file" id="" name="New_Image"  required >
+                            <input type="file" id="" name="New_Image"  required accept="image/*">
                         </div>
                         
                         <div style="display: flex; align-items: center;" class="form-group">

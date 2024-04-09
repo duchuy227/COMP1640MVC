@@ -183,6 +183,7 @@
 
         public function viewdocx($id){
             $coordinatorModel = new CoordinatorModel();
+            $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
             $contribution = $coordinatorModel->getContributionByID($id);
             
             $docxFilePath = $contribution['Con_Doc'];
@@ -221,6 +222,7 @@
             if(isset($_SESSION['is_login']) && $_SESSION['is_login'] == true && $_SESSION['role_id'] == 4) {
                 // Khởi tạo model
                 $coordinatorModel = new CoordinatorModel();
+                $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
         
                 $contribution = $coordinatorModel->getContributionById($id);
                 // Xử lý khi form được submit
@@ -252,6 +254,7 @@
                 $is_login = $user->is_login();
                 if ($is_login == true && $_SESSION['role_id'] == 4 ) {
                     $coordinatorModel = new CoordinatorModel();
+                    $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
                     $coordinatorModel->deleteContribution($id);
                     header('Location: index.php?action=coordinator_contribution');
                     exit();

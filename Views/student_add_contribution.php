@@ -86,7 +86,11 @@
                         
                         <div class="form-group">
                             <label for="Stu_ID"> Description</label>
-                            <textarea class="form-control" type="text"  name="Con_Description" required> </textarea>
+                            <textarea class="form-control" type="text"  name="Con_Description" cols="30" rows="5" required></textarea>
+                            <script src="./ckeditor/ckeditor.js"></script>
+                            <script>
+                                CKEDITOR.replace("Con_Description");                              
+                            </script>
                         </div>
                         <div class="form-group">
                             <label for="Con_Doc">Document</label>

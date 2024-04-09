@@ -61,7 +61,9 @@
                                     <td scope="row">
                                         <textarea style="border:none; outline:none; background:transparent" cols="30"><?php echo $student['Con_Description'] ?></textarea>
                                     </td>
-                                    <td scope="row"><?php echo $student['Com_Detail'] ?></td>
+                                    <td scope="row">
+                                    <textarea style="border:none; outline:none; background:transparent" cols="30"><?php echo $student['Com_Detail'] ?></textarea>
+                                    </td>
                                     <td scope="row"><?php echo $student['Con_Status'] ?></td>
                                 
                                     <td>

@@ -31,7 +31,7 @@ include 'PHPMailer/src/SMTP.php';
                 $status = $_POST['Con_Status'];
                 $studentID = $student['Stu_ID'];
                 $topicID = $_POST['Topic_ID'];
-                $description = $_POST['Con_Description'];
+                $description = strip_tags($_POST['Con_Description']);
 
                 $fa_id = $student['Fa_ID'];
                 $coordinator = $studentModel ->getCoordinatorAndStudentsByFaculty($fa_id);
@@ -270,10 +270,20 @@ include 'PHPMailer/src/SMTP.php';
         if ($is_login == true && $_SESSION['role_id'] == 2 ) {
             $studentModel = new StudentModel();
             $contribution = $studentModel->getContributionByID($id);
+            $student= $studentModel -> getStudentbyUserName($_SESSION['username']);
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                $contributionName = $_POST['Con_Name'];
+            
+                $time = time();
+                $currentTime = $time - (7 * 3600);
+                $submissionDate = date('Y-m-d H:i:s', $currentTime);
+                $topicID = $_POST['Topic_ID'];
                 $con_id= $_POST['Con_ID'];
                 $con_name = $_POST['Con_Name'];
-                $con_des = $_POST['Con_Description'];
+                $con_des = strip_tags($_POST['Con_Description']);
+
+                $fa_id = $student['Fa_ID'];
+                $coordinator = $studentModel ->getCoordinatorAndStudentsByFaculty($fa_id);
             
                 if(isset($_FILES["New_Image"]) && !empty($_FILES["New_Image"]["tmp_name"])){
                             
@@ -291,9 +301,10 @@ include 'PHPMailer/src/SMTP.php';
                                 $uploadPath = "Upload/" . $fileName;
                             }
                     if (move_uploaded_file($temp, $uploadPath)) {
-                                $studentModel -> updateContribution($con_id,$con_name,$con_des,$imageData, $uploadPath);
-                    header("location: index.php?action=student_contribution");
-                    exit;
+                        $studentModel -> updateContribution($con_id,$con_name,$con_des,$imageData, $uploadPath);
+                        $this->mailNotiToCoordinator($student,$submissionDate,$contributionName,$topicID,$uploadPath, $coordinator);
+                        header("location: index.php?action=student_contribution");
+                        exit;
                     }
                 }
             include 'views/student_update_contribution.php';

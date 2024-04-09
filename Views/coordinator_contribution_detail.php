@@ -47,8 +47,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Con_Description">Description</label>
-                            <input disabled type="text" class="form-control" id="" name="Con_Description" value='<?php echo $contribution['Con_Description'] ?>'required>
-                        </div>
+                            <textarea readonly class="form-control" id="" name="Con_Description" cols="30" rows="5" required><?php echo $contribution['Con_Description']; ?></textarea>                         </div>
                         
                         <div class="form-group">
                             <label for="Con_Status">Status</label>

@@ -51,8 +51,9 @@
             background-color: #d13639;
         }
 
-        .term-text h2 {
+        h2 {
             text-transform: uppercase;
+            text-align: center;
         }
 
         .term-text h4 {
@@ -98,9 +99,8 @@
     </style>
 <body>
     <div class="terms-box">
+    <h2>Term And Condition</h2>
         <div class="term-text">
-            <h2>Term And Condition of Submit Contribution</h2>
-            <p>Last Edited: 20/03/2024</p>
             <p>Dear Student, </p>
             <h3 style="color: #00BFFF; font-weight:bold">1. Acceptance of Terms</h3>
             <p>By submitting any contribution (including but not limited to text, images, audio, or video content) 

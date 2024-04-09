@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Con_Description">Description</label>
-                            <input disabled type="text" class="form-control" id="" name="Con_Description" value='<?php echo $studentContri['Con_Description'] ?>'required>
+                            <textarea readonly class="form-control" id="" name="Con_Description" required><?php echo $studentContri['Con_Description']; ?></textarea> 
                         </div>
                         
                         <div class="form-group">

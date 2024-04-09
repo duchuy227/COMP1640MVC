@@ -37,6 +37,7 @@
 
             <div class="table-data">
 				<div class="order">
+                <h2 style="text-align:center; color: #333">Edit Profile</h2>
                     <form  method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="username">Username</label>
