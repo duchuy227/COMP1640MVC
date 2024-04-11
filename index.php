@@ -86,27 +86,25 @@ switch ($action) {
         $adminController = new AdminController();
         $adminController->delete_coordinator($_GET['id']);
         break;
-        //////////////
+ 
     case 'login':    
-            require_once 'Controllers/UserController.php';
-            $UserController = new UserController();
-            $UserController->login();     
+        require_once 'Controllers/UserController.php';
+        $UserController = new UserController();
+        $UserController->login();
         break;
-        case 'register':
-            require_once 'Controllers/UserController.php';
-            $UserController = new UserController();
-            $UserController->register();     
-            break;   
+
+    case 'register':
+        require_once 'Controllers/UserController.php';
+        $UserController = new UserController();
+        $UserController->register();     
+        break;  
+
     case 'logout':
-   
-            require_once 'Controllers/UserController.php';
-        
-            $UserController = new UserController();
-           
-            $UserController->logout();
-       
-            break;
-            /////////////
+        require_once 'Controllers/UserController.php';
+        $UserController = new UserController();
+        $UserController->logout();
+        break;
+
             // student
         case 'student_index':
             require_once 'Controllers/StudentController.php';
@@ -267,46 +265,6 @@ switch ($action) {
             $CoordinatorController->delete($_GET['id']);
             break;
 
-        
-        // manager    
-        // case 'index_topic':
-        //     require_once 'Controllers/TopicController.php';
-        //     $topicController = new TopicController();
-        //     $topicController->index();
-        //     break;  
-        
-        // case 'add_topic':
-        //     require_once 'Controllers/TopicController.php';
-        //     $topicController = new TopicController();
-        //     $topicController->add();
-        //     break;
-            
-        // case 'edit_topic':
-        //     require_once 'Controllers/TopicController.php';
-        //     $topicController = new TopicController();
-        //     $topicController->edit($_GET['id']);
-        //     break;  
-            
-        // case 'delete_topic':
-        //     require_once 'Controllers/TopicController.php';
-        //     $topicController = new TopicController();
-        //     $topicController->delete($_GET['id']);
-        //     break;
-        // case 'add_comment':
-        //     require_once 'Controllers/CoordinatorController.php';
-        //     $coor = new CoordinatorController();
-        //     $coor-> add_comment($_GET['id']);
-        //     break;
-        // case 'download_zip':
-        //         require_once 'Controllers/CoordinatorController.php';
-        //         $coor = new CoordinatorController();
-        //         $coor-> download();
-        //         break;
-        // case 'student_index':
-        //         require_once 'Controllers/StudentController.php';
-        //         $stu = new StudentController();
-        //         $stu-> indexStudent();
-        //         break;
 
         /// Manager ///
 
@@ -320,6 +278,42 @@ switch ($action) {
             require_once 'Controllers/ManagerController.php';
             $ManagerController = new ManagerController();
             $ManagerController -> manager_profile();
+            break;
+        
+        case 'manager_view_faculty':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController -> manager_view_faculty($_GET['fa']);
+            break;
+        
+        case 'manager_edit_student':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController -> manager_edit_student($_GET['id']);
+            break;
+        
+        case 'manager_update_coordinator':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController -> manager_edit_coordinator($_GET['id']);
+            break;
+        
+        case 'manager_view_contribution':
+            require_once 'Controllers/ManagerController.php';                       
+            $ManagerController = new ManagerController();
+            $ManagerController -> manager_view_contribution($_GET['id']);
+            break;
+
+        case 'download_zip':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController-> download($_GET['id']);
+            break;
+
+        case 'manager_statistics':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController-> chart();
             break;
             //////// End manager //////////
     default:

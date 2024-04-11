@@ -66,7 +66,7 @@
 
 		<!-- MAIN -->
 		<main>
-        <?php include 'Layout/manager_content.php' ?>
+        
 			<div class="data">
 				<div class="content-data">
                     <h1 style="color: #009879; text-align:center; text-transform:uppercase;">Manager Profile</h1>

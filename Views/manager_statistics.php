@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="./views/Layout/style.css">
 	<link rel="icon" href="./Image/img.png" type="image/x-icon">
-	<title>Manager Site</title>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <title>Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-	<style>
+    <style>
         .faculty-contri {
             width: 400px;
             height: 500px;
@@ -30,68 +34,72 @@
         }
     </style>
 <body>
-	
-	<!-- SIDEBAR -->
-	<?php include 'Layout/manager_sidebar.php' ?>
-	<!-- SIDEBAR -->
+    <?php include 'Layout/manager_sidebar.php' ?>
 
-	<!-- NAVBAR -->
 	<section id="content">
-		<!-- NAVBAR -->
 		<?php include 'Layout/manager_navbar.php' ?>
-		<!-- NAVBAR -->
 
-		<!-- MAIN -->
 		<main>
-			<?php include 'Layout/manager_content.php' ?>
 			<div class="data">
 				<div class="content-data">
-					<div class="topic-contribution">
-                        <h4 style="color: #009966; text-transform:uppercase; text-align:center">Topic Contribution Chart</h4>
-                        <canvas id="topicChart"></canvas>
+                    <div class="faculty-contri">
+                        <h4 style="color: #009966; text-transform:uppercase; text-align:center">Faculty Contribution Chart</h4>
+                        <canvas id="facultyChart"></canvas>
                     </div>
-				</div>
-				<div class="content-data">
+                </div>
+                <br>
+                <div class="content-data">
                     <div class="falcuty-student">
                         <h4 style="color: #009966; text-transform:uppercase; text-align:center">Student Faculty Chart</h4>
                         <canvas id="studentChart"></canvas>
                     </div>
                 </div>
-			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- NAVBAR -->
+
+                <div class="content-data">
+                    <div class="topic-contribution">
+                        <h4 style="color: #009966; text-transform:uppercase; text-align:center">Topic Contribution Chart</h4>
+                        <canvas id="topicChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	<script src="./views/Layout/script.js"></script>
 
-	<script>
-        // var facultyData = <?php echo json_encode($fdata); ?>;
-        // var facultyNames = [];
-        // var facultyContributionCounts = [];
 
-        // for (var i = 0; i < facultyData.length; i++) {
-        //     facultyNames.push(facultyData[i].Fa_Name);
-        //     facultyContributionCounts.push(parseInt(facultyData[i].contribution_count)); // Convert to integer
-        // }
+    <script>
+        var facultyData = <?php echo json_encode($fdata); ?>;
+        var facultyNames = [];
+        var facultyContributionCounts = [];
 
-        // var facultyCtx = document.getElementById('facultyChart').getContext('2d');
-        // var facultyChart = new Chart(facultyCtx, {
-        //     type: 'bar',
-        //     data: {
-        //         labels: facultyNames,
-        //         datasets: [{
-        //             label: 'Contribution Count',
-        //             data: facultyContributionCounts,
-        //             backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        //             borderColor: 'rgba(255, 99, 132, 1)',
-        //             borderWidth: 1
-        //         }]
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         maintainAspectRatio: false
-        //     }
-        // });
+        for (var i = 0; i < facultyData.length; i++) {
+            facultyNames.push(facultyData[i].Fa_Name);
+            facultyContributionCounts.push(parseInt(facultyData[i].contribution_count)); // Convert to integer
+        }
+
+        var facultyCtx = document.getElementById('facultyChart').getContext('2d');
+        var facultyChart = new Chart(facultyCtx, {
+            type: 'bar',
+            data: {
+                labels: facultyNames,
+                datasets: [{
+                    label: 'Contribution Count',
+                    data: facultyContributionCounts,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
 
         // Data for Student Count by Faculty Chart
         var studentData = <?php echo json_encode($sdata); ?>;
