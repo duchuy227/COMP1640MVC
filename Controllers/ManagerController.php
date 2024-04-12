@@ -211,34 +211,29 @@
             if ($this->is_login == true && $_SESSION['role_id'] == 3 ) {
                 $managerModel = new ManagerModel();
                 $ManagerProfile = $managerModel->getManagerByUsername($_SESSION['username']);
-                $contribution = $managerModel->getContributionSelected();
-        
-                // Tạo tệp tin zip
+                $contribution = $managerModel->getContributionSelected();        
                 $zip = new ZipArchive();
-                $zipFileName = 'contributions.zip';
-                $zip->open($zipFileName, ZipArchive::CREATE);
-        
-                foreach ($contribution as $singleContribution) {
-                    if (!empty($singleContribution['Con_Doc'])) {
-                        $fileName = 'contribution_' . $singleContribution['Con_Name'] . '.doc';
-                        
-                        $fileContent = $singleContribution['Con_Doc'];
-        
-                        // Thêm vào tệp zip
-                        $zip->addFile($fileName, basename($fileContent));
+                $zipFileName = 'contribution.zip';
+                if ($zip->open($zipFileName, ZipArchive::CREATE || ZipArchive::OVERWRITE) === TRUE) {
+                    foreach ($contribution as $con) {
+                        $docFiles = $con['Con_Doc'];
+                        $zip->addFile($docFiles);
                     }
+                    $zip->close();
+
+                    header("Content-type: application/zip");
+                    header("Content-Disposition: attachment; filename=$zipFileName");
+                        // header("Pragma: no-cache");
+                        // header("Expires: 0");
+
+
+                    readfile($zipFileName);
+
+                
+                    unlink($zipFileName);
+                } else {
+                    echo "Error";
                 }
-        
-                $zip->close();
-        
-             
-                header("Content-Type: application/zip");
-                header("Content-Disposition: attachment; filename== $zipFileName");
-                header("Content-Length: " . filesize($zipFileName));
-                readfile($zipFileName);
-        
-           
-                unlink($zipFileName);
             }
         }
         
