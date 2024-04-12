@@ -25,6 +25,13 @@
             return $sql->fetch(PDO::FETCH_ASSOC);
         }
 
+        public function updateManagerAccount($id, $username, $password, $email, $dob, $roleId,$imageData)
+        {
+            $query = "UPDATE Manager SET Ma_Username = :username, Ma_Password = :password, Ma_Email = :email, Ma_DOB = :dob, Role_ID = :role_id ,Image = :imageData WHERE Ma_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':username' => $username, ':password' => $password, ':email' => $email, ':dob' => $dob, ':role_id' => $roleId, ':id' => $id,':imageData'=>$imageData));
+        }
+
         public function percentContribution()
         {
             $query = "SELECT (COUNT(c.Con_ID) / (SELECT COUNT(*) FROM student)) 
@@ -48,6 +55,38 @@
             $sql = $this->conn->prepare($query);
             $sql->execute();
             return $sql->rowCount();
+        }
+
+        public function getAllStudentToRow()
+        {
+            $query = "SELECT * FROM student";
+            $sql = $this->conn->prepare($query);
+            $sql->execute();
+            return $sql->rowCount();
+        }
+
+        public function getAllTopicToRow()
+        {
+            $query = "SELECT * FROM topic";
+            $sql = $this->conn->prepare($query);
+            $sql->execute();
+            return $sql->rowCount();
+        }
+
+        public function getAllTopic()
+        {
+            $query = "SELECT * FROM Topic Join Faculty ON Topic.Fa_ID = Faculty.Fa_ID;";
+            $sql = $this->conn->prepare($query);
+            $sql->execute();
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        public function getTopicById($id)
+        {
+            $query = "SELECT * FROM Topic Join Faculty ON Topic.Fa_ID = Faculty.Fa_ID where Topic_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id'=> $id));
+            return $sql->fetch(PDO::FETCH_ASSOC);
         }
 
         public function getStudentByFaculty($id)
@@ -89,6 +128,18 @@
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        // public function getContributionSelectedDoc()
+        // {
+        //     $query = "SELECT Con_Doc FROM contribution where Con_Status = 'Approval'";
+        //     $sql = $this->conn->prepare($query);
+        //     $documents = [];
+        //     while ($row = $sql->fetch()) {
+        //         $documents[] = $row['Con_Doc'];
+        //     }
+        
+        //     return $documents;
+        // }
+
         public function getContributionByID($id)
         {
             $query = "SELECT * FROM contribution s WHERE Con_ID= :id";
@@ -128,6 +179,8 @@
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+
+        
 
 
     }

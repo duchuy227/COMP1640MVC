@@ -16,6 +16,7 @@
 				
 			</li>
 			<li><a style="text-decoration: none;" href="index.php?action=manager_statistics"><i class='bx bxs-chart icon' ></i> Statistics</a></li>
+			<li><a style="text-decoration: none;" href="index.php?action=manager_topic"><i class="bi bi-book-fill icon"></i> Topic</a></li>
 			<li class="divider" data-text="Manage"></li>
 			<li>
 				<a style="text-decoration: none;" href="#"><i class='bx bxs-notepad icon' ></i> Contribution <i class='bx bx-chevron-right icon-right' ></i></a>

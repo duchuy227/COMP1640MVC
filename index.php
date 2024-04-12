@@ -19,7 +19,13 @@ switch ($action) {
         require_once 'Controllers/AdminController.php';
         $adminController = new AdminController();
         $adminController->indexAdmin();
-        break;      
+        break;
+    
+    case 'update_admin':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->update_admin($_GET['id']);
+        break;
    
     case 'insert_manager':
         require_once 'Controllers/AdminController.php';
@@ -307,13 +313,31 @@ switch ($action) {
         case 'download_zip':
             require_once 'Controllers/ManagerController.php';
             $ManagerController = new ManagerController();
-            $ManagerController-> download($_GET['id']);
+            $ManagerController-> download();
             break;
 
         case 'manager_statistics':
             require_once 'Controllers/ManagerController.php';
             $ManagerController = new ManagerController();
             $ManagerController-> chart();
+            break;
+
+        case 'manager_edit_profile':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController-> manager_edit_profile();
+            break;
+        
+        case 'manager_topic':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController-> manager_topic();
+            break;
+        
+        case 'manager_topic_detail':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController-> manager_topic_detail($_GET['id']);
             break;
             //////// End manager //////////
     default:

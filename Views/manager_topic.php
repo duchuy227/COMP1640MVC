@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <title>Contribution</title>
+    <title>Topic</title>
 </head>
 
 <body>
@@ -21,35 +21,34 @@
 		<main>
 			<div class="data">
 				<div class="content-data">
-                    <h4 style="color: #009966; text-transform:uppercase">Contribution</h4>
+                    <h4 style="color: #511F90; text-transform:uppercase; text-align:center; font-weight:bolder; font-size: 30px">All Topics</h4>
+                    <br>
                         <table class="table table-bordered border-bold">
                             <thead class="thead-dark">
-                                <tr style="text-align:center; background-color:#fec163" class="table bordered">
+                                <tr style="text-align:center; background-color:#7388C1; font-weight:bold" class="table bordered">
                                     <td scope="col">Name</td>
-                                    <td scope="col">Description</td>
-                                    <td scope="col">Subbmission Time</td>
-                                    <td scope="col"> Image</td>
-                                    <td scope="col"> Doc</td>
-                                    <td scope="col">Status</td>
+                                    <td scope="col">Start Date</td>
+                                    <td scope="col">Closure Date</td>
+                                    <td scope="col">Final Date</td>
+                                    <td scope="col">Faculty</td>
+                                    <td scope="col"></td>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($contribution as $contribution): ?>
-                            <tr class="table bordered" style=" background-color: #d7ede2; text-align:center">
-                                <td scope="row"><?php echo $contribution['Con_Name'] ?></td>
-                                <td scope="row">
-                                    <textarea style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
-                                </td>
-                                <td scope="row"><?php echo $contribution['Con_SubmissionTime'] ?></td>
-                                <td scope="row"><?php echo  '<img width="100" style="margin-bottom: 20px"  src="data:image/*;base64,' . base64_encode($contribution['Con_Image']) . '"  />'; ?></td>
-                                <td scope="row">
-                                    <?php if ($contribution['Con_Status']=='Approval'):?>
+                            <?php foreach ($topic as $topic): ?>
+                            <tr class="table bordered" style=" background-color: #A095C4; text-align:center">
+                                <td scope="row"><?php echo $topic['Topic_Name'] ?></td>
+                                <td scope="row"><?php echo $topic['Topic_StartDate'] ?></td>
+                                <td scope="row"><?php echo $topic['Topic_ClosureDate'] ?></td>
+                                <td scope="row"><?php echo $topic['Topic_FinalDate'] ?></td>
+                                <td scope="row"><?php echo $topic['Fa_Name'] ?></td>
+                                <td>
                                     <button class="btn btn-secondary">
-                                        <a style="text-decoration: none; color:#fff" href="index.php?action=download_zip">Download</a>
+                                        <a style="text-decoration: none; color:#fff"
+                                        href="index.php?action=manager_topic_detail&id=<?php echo $topic['Topic_ID'] ?>"><i class="bi bi-files"></i></a>
                                     </button>
-                                    <?php endif;?>
-                                </td>
-                                <td scope="row"><?php echo $contribution['Con_Status'] ?></td>
+                                </td>                                
                             </tr>
                             <?php endforeach; ?>
                         </tbody>

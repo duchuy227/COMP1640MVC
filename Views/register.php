@@ -55,21 +55,21 @@
                 
                 <div class="form-group" style="margin-bottom: 20px;">
                     <div class="col-md-12">
-                        <input type="date" class="form-control" name="dob" id="inputEmail4" placeholder="Date of Birth">
+                        <input type="date" class="form-control" name="dob" id="inputEmail4" placeholder="Date of Birth" required>
                     </div>
                 </div>
                 
                 <div class="form-group" style="margin-bottom: 0px;">
                     <div class="col-md-12">
                         
-                        <select name="fa_id" style="background-color: #05091c; border:none; outline:none; border-radius:40px; color:white; font-size: 17px" id="inputState" class="form-control">
-                        <option selected >Choose Faculty</option>
-                        <?php
-                        foreach($faculty as $fac)
-                        {
-                            echo "  <option value='".$fac['Fa_ID']."'>".$fac['Fa_Name'] ."</option>";
-                        }
-                        ?>
+                        <select name="fa_id" style="background-color: #05091c; border:none; outline:none; border-radius:40px; color:white; font-size: 17px" id="inputState" class="form-control" required>
+                            <option hidden require>Choose Faculty</option>
+                            <?php
+                            foreach($faculty as $fac)
+                            {
+                                echo "  <option value='".$fac['Fa_ID']."'>".$fac['Fa_Name'] ."</option>";
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>

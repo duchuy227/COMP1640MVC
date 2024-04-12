@@ -101,7 +101,7 @@
                                         <p style="color: #303030; font-size: 20px;"><?php echo $ManagerProfile['Ma_DOB'] ; ?></p>
                                     </div>
                                     <br>
-                                    <a class="button" href="index.php?action=coordinator_edit_profile">Edit Profile</a>
+                                    <a class="button" href="index.php?action=manager_edit_profile">Edit Profile</a>
                                 </div>
                             </div>
                     </div>

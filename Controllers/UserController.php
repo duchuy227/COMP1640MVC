@@ -71,7 +71,7 @@ class UserController{
                         } 
                     } else {
                     
-                        $_SESSION['error_message'] = "Invalid username or password";
+                        $_SESSION['error_message'] = "Invalid Information";
                         $_SESSION['is_login'] = false;
                         // header('Location: index.php?action=login');           
                         // exit();

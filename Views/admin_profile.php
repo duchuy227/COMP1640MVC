@@ -94,10 +94,10 @@
         <div class="tabular--wrapper">
             <h2>Admin Profile</h2>
             <?php foreach ($admin as $admin): ?>
-            <div class="card mb-3" style="max-width: 1100px; margin-top: 30px;">
+            
                 <div class="row no-gutters">
                     <div class="col-md-5">
-                        <img class="img-small" width="430" src="<?php echo ($admin['Image'] != null) ? 'data:image/*;base64,' . base64_encode($admin['Image']) : 'placeholder_image_url.jpg'; ?>" alt="Profile Picture" class="img-fluid">
+                        <img class="img-small" width="370" src="<?php echo ($admin['Image'] != null) ? 'data:image/*;base64,' . base64_encode($admin['Image']) : 'placeholder_image_url.jpg'; ?>" alt="Profile Picture" class="img-fluid">
                         <img class="img-fullscreen" src="<?php echo ($admin['Image'] != null) ? 'data:image/*;base64,' . base64_encode($admin['Image']) : 'placeholder_image_url.jpg'; ?>" alt="Profile Picture" class="img-fluid">
                     </div>
                     <div class="col-md-7">
@@ -137,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            
             
         </div>
         <?php endforeach ?>

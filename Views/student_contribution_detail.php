@@ -76,7 +76,7 @@
 				<div class="order">
                     <h4 style="text-align: center; color: #333">Contribution Detail</h4>
                     <form action="" method="post"  >
-                    <input type="hidden" class="form-control" id="" name="Con_ID" value="<?php echo $studentContri['Con_ID'] ?>"required>
+                        <input type="hidden" class="form-control" id="" name="Con_ID" value="<?php echo $studentContri['Con_ID'] ?>"required>
                         <div class="form-group">
                             <label for="Con_Name">Name</label>
                             <input disabled  type="text" class="form-control" id="" name="Con_Name" value='<?php echo $studentContri['Con_Name'] ?>'required>

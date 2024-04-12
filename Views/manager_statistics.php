@@ -40,14 +40,16 @@
 		<?php include 'Layout/manager_navbar.php' ?>
 
 		<main>
+        <h4 style="color: #009966; text-transform:uppercase; text-align:center">Statistics</h4>
 			<div class="data">
-				<div class="content-data">
+                
+				<!-- <div class="content-data">
                     <div class="faculty-contri">
                         <h4 style="color: #009966; text-transform:uppercase; text-align:center">Faculty Contribution Chart</h4>
                         <canvas id="facultyChart"></canvas>
                     </div>
                 </div>
-                <br>
+                <br> -->
                 <div class="content-data">
                     <div class="falcuty-student">
                         <h4 style="color: #009966; text-transform:uppercase; text-align:center">Student Faculty Chart</h4>
@@ -73,33 +75,7 @@
 
 
     <script>
-        var facultyData = <?php echo json_encode($fdata); ?>;
-        var facultyNames = [];
-        var facultyContributionCounts = [];
-
-        for (var i = 0; i < facultyData.length; i++) {
-            facultyNames.push(facultyData[i].Fa_Name);
-            facultyContributionCounts.push(parseInt(facultyData[i].contribution_count)); // Convert to integer
-        }
-
-        var facultyCtx = document.getElementById('facultyChart').getContext('2d');
-        var facultyChart = new Chart(facultyCtx, {
-            type: 'bar',
-            data: {
-                labels: facultyNames,
-                datasets: [{
-                    label: 'Contribution Count',
-                    data: facultyContributionCounts,
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
+        
 
         // Data for Student Count by Faculty Chart
         var studentData = <?php echo json_encode($sdata); ?>;

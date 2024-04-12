@@ -17,16 +17,16 @@
 				<div class="card" style="padding: 10px; border-radius: 10px; background: var(--light); box-shadow: 4px 4px 16px rgba(0, 0, 0, .05);">
 					<div class="head">
 						<div>
-							<h2>234</h2>
-							<p>Sales</p>
+							<h2><?php echo $allstu ?></h2>
+							<p>Student</p>
 						</div>
 					</div>
 				</div>
 				<div class="card" style="padding: 10px; border-radius: 10px; background: var(--light); box-shadow: 4px 4px 16px rgba(0, 0, 0, .05);">
 					<div class="head">
 						<div>
-							<h2>465</h2>
-							<p>Pageviews</p>
+							<h2><?php echo $alltopic ?></h2>
+							<p>Topic</p>
 						</div>
 					</div>
 				</div>

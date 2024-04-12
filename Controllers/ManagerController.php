@@ -3,6 +3,9 @@
     require_once 'UserController.php';
     require_once 'Models/CoordinatorModel.php';
     require_once 'Models/AdminModel.php';
+    use PhpOffice\PhpWord\IOFactory;
+    use PhpOffice\PhpWord\PhpWord;
+
 
     class ManagerController {
         private  $is_login;
@@ -19,12 +22,34 @@
                 $percent = $managerModel->percentContribution();
                 $percentValue = floor($percent['percentage']);
                 $allContri = $managerModel->getAllContributionToRow();
+                $allstu = $managerModel ->getAllStudentToRow();
+                $alltopic = $managerModel ->getAllTopicToRow();
 
                 $fdata = $managerModel->getContributionCountsByFaculty();
                 $tdata = $managerModel->getContributionByTopic();
                 $sdata = $managerModel->getStudentCountByFaculty();
         
                 include 'views/manager_index.php';
+            }
+        }
+
+        public function manager_topic(){
+            if ($this->is_login == true && $_SESSION['role_id'] == 3) {
+                $managerModel = new ManagerModel();
+                $ManagerProfile = $managerModel->getManagerbyUserName($_SESSION['username']);
+                $topic = $managerModel ->getAllTopic();
+
+                include 'views/manager_topic.php';
+            }
+        }
+
+        public function manager_topic_detail($id){
+            if ($this->is_login == true && $_SESSION['role_id'] == 3) {
+                $managerModel = new ManagerModel();
+                $ManagerProfile = $managerModel->getManagerbyUserName($_SESSION['username']);
+                $topics = $managerModel ->getTopicById($id);
+
+                include 'views/manager_topic_detail.php';
             }
         }
         
@@ -35,6 +60,40 @@
                 $ManagerProfile = $managerModel->getManagerByUsername($_SESSION['username']);
 
                 include 'views/manager_profile.php';
+            }
+        }
+
+
+        public function manager_edit_profile(){
+            if ($this->is_login == true && $_SESSION['role_id'] == 3 ) {
+                $managerModel = new ManagerModel();
+                $ManagerProfile = $managerModel->getManagerByUsername($_SESSION['username']);
+
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if(isset($_FILES["new_avatar"]) && !empty($_FILES["new_avatar"]["tmp_name"])) { 
+                        $file = $_FILES["new_avatar"];
+                        $imageData = file_get_contents($file["tmp_name"]);          
+                    } else {
+                        $image = $_POST["avatar"];
+                        $imageData = base64_decode($image);                  
+                    }
+                    $id = $_POST['id'];
+                    $username = $_POST['username'];
+                    $password = $_POST['password'];
+                    $email = $_POST['email'];         
+                    $dob = $_POST['dob'];
+                    $roleId = $_POST['role_id'];
+    
+                    // $err = $adminModel->validateManager($id, $username, $password, $email, $dob, $roleId, $imageData, $insert);
+    
+                    if(empty($err)){
+                        $managerModel->updateManagerAccount($id, $username, $password, $email, $dob, $roleId,$imageData);
+                        header('Location: index.php?action=manager_profile');
+                        exit();
+                    }
+                }
+
+                include 'views/manager_edit_profile.php';
             }
         }
 
@@ -148,39 +207,37 @@
             }
         }
 
-        public function download($id){
+        public function download(){
             if ($this->is_login == true && $_SESSION['role_id'] == 3 ) {
                 $managerModel = new ManagerModel();
                 $ManagerProfile = $managerModel->getManagerByUsername($_SESSION['username']);
-                $contribution = $managerModel->getContributionByID($id);
+                $contribution = $managerModel->getContributionSelected();
         
                 // Tạo tệp tin zip
                 $zip = new ZipArchive();
                 $zipFileName = 'contributions.zip';
-                $zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                $zip->open($zipFileName, ZipArchive::CREATE);
         
                 foreach ($contribution as $singleContribution) {
                     if (!empty($singleContribution['Con_Doc'])) {
-                        // Tạo tên tệp tin
                         $fileName = 'contribution_' . $singleContribution['Con_Name'] . '.doc';
                         
-                        // Mã hóa dữ liệu văn bản trước khi thêm vào tệp zip
-                        $fileContent = base64_encode($singleContribution['Con_Doc']);
+                        $fileContent = $singleContribution['Con_Doc'];
         
                         // Thêm vào tệp zip
-                        $zip->addFromString($fileName, $fileContent);
+                        $zip->addFile($fileName, basename($fileContent));
                     }
                 }
         
                 $zip->close();
         
-                // Trả về tệp tin zip để người dùng tải xuống
+             
                 header("Content-Type: application/zip");
-                header("Content-Disposition: attachment; filename=$zipFileName");
+                header("Content-Disposition: attachment; filename== $zipFileName");
                 header("Content-Length: " . filesize($zipFileName));
                 readfile($zipFileName);
         
-                // Xóa tệp tin zip sau khi đã truyền cho người dùng
+           
                 unlink($zipFileName);
             }
         }
