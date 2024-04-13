@@ -239,6 +239,11 @@
                         $this->model->addComment($Com_Detail, $Con_ID, $Coor_ID);
                         $this->model->changeStatus($Con_ID);
 
+                        $time = time();
+                        $currentTime = $time - (7 * 3600);
+                        $CommentTime = date('Y-m-d H:i:s', $currentTime);
+                        $this->mailToAdmin($CommentTime,$coorInfo['Coor_FullName'],$Con_ID);
+
                         header('location: index.php?action=coordinator_contribution');
                         exit;
                     } else {
@@ -248,6 +253,84 @@
             }
             ob_end_flush();
         }
+
+        public function mailToAdmin($CommentTime, $coorname, $Con_ID){
+            $mail = new PHPMailer(true);
+            try {
+                // Server settings
+                $mail->SMTPDebug = 0;
+                $mail->isSMTP(); // Send using SMTP
+                $mail->Host       = 'smtp.gmail.com'; // Set the SMTP server to send through
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'leduchuy22072002@gmail.com';
+                $mail->Password   = 'utkziciechiujjxy';
+                $mail->Port       = 587;
+        
+                // Recipients
+                $mail->setFrom('leduchuy22072002@gmail.com');
+                $mail->addAddress('huyldgbh200353@fpt.edu.vn'); // Thay đổi địa chỉ email tại đây
+        
+                // Content
+                $mail->isHTML(true);
+                $mail->Subject = 'Comment on Contribution';
+        
+                // Build HTML content
+                $htmlContent = '
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Comment on Contribution</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                background-color: #f4f4f4;
+                                margin: 0;
+                                padding: 0;
+                                box-sizing: border-box;
+                            }
+                            .container {
+                                max-width: 600px;
+                                margin: 20px auto;
+                                background-color: #fff;
+                                padding: 20px;
+                                border-radius: 8px;
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            }
+                            h1 {
+                                color: #8B008B;
+                                text-align: center;
+                            }
+                            p {
+                                color: #333;
+                                font-size: 18px;
+                                line-height: 1.6;
+                                margin-bottom: 20px;
+                            }
+                            .highlight {
+                                color: #4B0082;
+                                font-weight: bold;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <h1>Comment on Contribution</h1>
+                            <p>The coordinator <span class="highlight">' . $coorname . '</span> has commented on contribution with ID <span class="highlight">' . $Con_ID . '</span> at <span class="highlight">' . $CommentTime . '</span>.</p>
+                        </div>
+                    </body>
+                    </html>
+                ';
+        
+                $mail->Body = $htmlContent;
+                $mail->send();
+                // echo 'Message has been sent';
+            } catch (Exception $e) {
+        
+            }
+        }
+        
 
         public function delete($id){
                 $user = new UserController();

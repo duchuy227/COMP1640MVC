@@ -127,8 +127,18 @@
             $query = 'UPDATE contribution set Con_Status = "Approval" where Con_ID =:con_id';
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':con_id' => $Con_ID)) ;
-    
+            $sql->fetch(PDO::FETCH_ASSOC);
+            $contri = $this->getContributionByID($Con_ID);
+            $this->addToMagazine("Posted", $contri['Con_SubmissionTime'],$Con_ID);
         }
+
+        public function addToMagazine($status,$time,$Con_ID){
+            $query = "INSERT INTO magazine (Maga_Status,Maga_CreateTime,Con_ID) 
+            VALUES (:status,:time,:con_id)";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':status'=>$status,':time'=>$time,':con_id' => $Con_ID)) ;
+        }
+        
         public function checkDate($Con_ID){
             $query = 'SELECT * FROM contribution WHERE Con_ID=:con_id and TIMESTAMPDIFF(DAY, Con_SubmissionTime, NOW()) < 14';
             $sql = $this->conn->prepare($query);

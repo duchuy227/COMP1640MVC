@@ -18,6 +18,8 @@ class AdminModel
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
     public function getAllAdminAccount(){
         $query = "SELECT * FROM admin";
         $sql = $this->conn->query($query);
@@ -346,6 +348,7 @@ class AdminModel
         $sql = $this->conn->query($query);
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function getAllFaculty()
     {
         $query = "SELECT * FROM faculty";
@@ -461,6 +464,113 @@ class AdminModel
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':fa_id'=> $fa_id));
         return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getContributionCountsByFaculty() {
+        $query = "SELECT f.Fa_Name, COUNT(c.Con_ID) AS contribution_count
+                  FROM Contribution c
+                  INNER JOIN Student s ON c.Stu_ID = s.Stu_ID
+                  INNER JOIN Faculty f ON s.Fa_ID = f.Fa_ID
+                  GROUP BY f.Fa_Name";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getContributionByTopic(){
+        $query = "SELECT t.Topic_Name, COUNT(c.Con_ID) AS contribution_count
+                  FROM Topic t
+                  LEFT JOIN Contribution c ON t.Topic_ID = c.Topic_ID
+                  GROUP BY t.Topic_Name";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getStudentCountByFaculty(){
+        $query = "SELECT f.Fa_Name, COUNT(s.Stu_ID) AS student_count
+        FROM Student s
+        INNER JOIN Faculty f ON s.Fa_ID = f.Fa_ID
+        GROUP BY f.Fa_Name";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getCountContributionByDate(){
+        $query = "SELECT DATE(Con_SubmissionTime) AS submission_date, COUNT(*) AS num_contributions
+        FROM Contribution
+        GROUP BY DATE(Con_SubmissionTime)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllTopic()
+    {
+        $query = "SELECT * FROM Topic Join Faculty ON Topic.Fa_ID = Faculty.Fa_ID;";
+        $sql = $this->conn->prepare($query);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTopicById($id)
+        {
+            $query = "SELECT * FROM Topic Join Faculty ON Topic.Fa_ID = Faculty.Fa_ID where Topic_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id'=> $id));
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+    
+    public function addTopic($name, $startDate, $closureDate, $finalDate, $descriptions, $imageData, $fa_id)
+    {
+        $query = "INSERT INTO Topic (Topic_Name, Topic_StartDate, Topic_ClosureDate, Topic_FinalDate, Topic_Description, Topic_Image, Fa_ID) VALUES (:name, :startDate, :closureDate, :finalDate, :descriptions, :imageData, :fa_id)";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':name' => $name, ':startDate' => $startDate, ':closureDate' => $closureDate, ':finalDate' => $finalDate, ':descriptions' => $descriptions, ':imageData'=>$imageData, ':fa_id' => $fa_id));
+    }
+
+    public function updateTopic($id, $name, $startDate, $closureDate, $finalDate, $descriptions,$imageData, $fa_id)
+    {
+        $query = "UPDATE Topic SET Topic_Name = :name, Topic_StartDate = :startDate, Topic_ClosureDate = :closureDate, Topic_FinalDate = :finalDate, Topic_Description = :descriptions, Topic_Image = :imageData, Fa_ID = :fa_id WHERE Topic_ID = :id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':id' => $id, ':name' => $name, ':startDate' => $startDate, ':closureDate' => $closureDate, ':finalDate' => $finalDate, ':descriptions' => $descriptions, ':imageData'=>$imageData, ':fa_id' => $fa_id));
+    }
+
+    public function deleteTopic($id)
+    {
+        $query = "DELETE FROM Topic WHERE Topic_ID = :id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':id' => $id));
+    }
+
+    public function getAllMagazine(){
+        $query = "SELECT Magazine.*, Contribution.Con_Name, Contribution.Con_Description, Contribution.Con_Doc, Contribution.Con_Image, Topic.Topic_Name,Student.Stu_FullName, Faculty.Fa_Name
+                  FROM Magazine
+                  JOIN Contribution ON Magazine.Con_ID = Contribution.Con_ID
+                  JOIN Student ON Contribution.Stu_ID = Student.Stu_ID
+                  JOIN Topic ON Contribution.Topic_ID = Topic.Topic_ID
+                  JOIN Faculty ON Topic.Fa_ID = Faculty.Fa_ID";
+        $sql = $this->conn->prepare($query);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getMagazineDetailsById($maga_id) {
+        $query = "SELECT Magazine.*, 
+                         Contribution.Con_Name, Contribution.Con_Description, Contribution.Con_Doc, Contribution.Con_Image, 
+                         Topic.Topic_Name,
+                         Student.Stu_FullName, 
+                         Faculty.Fa_Name 
+                  FROM Magazine 
+                  JOIN Contribution ON Magazine.Con_ID = Contribution.Con_ID 
+                  JOIN Topic ON Contribution.Topic_ID = Topic.Topic_ID
+                  JOIN Student ON Contribution.Stu_ID = Student.Stu_ID 
+                  JOIN Faculty ON Topic.Fa_ID = Faculty.Fa_ID
+                  WHERE Magazine.Maga_ID = :maga_id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':maga_id'=> $maga_id));
+        return $sql->fetch(PDO::FETCH_ASSOC);
     }
 }
 ?>

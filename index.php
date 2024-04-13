@@ -26,6 +26,67 @@ switch ($action) {
         $adminController = new AdminController();
         $adminController->update_admin($_GET['id']);
         break;
+    
+    case 'admin_statistics':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_statistics();
+        break;
+    
+    case 'admin_topic':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_topic();
+        break;
+    
+    case 'admin_topic_detail':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_topic_detail($_GET['id']);
+        break;
+    
+    case 'admin_add_topic':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_add_topic();
+        break;
+    
+    case 'admin_edit_topic':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_edit_topic($_GET['id']);
+        break;
+    
+    case 'admin_delete_topic':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_delete_topic($_GET['id']);
+        break;
+
+    case 'admin_magazine':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_magazine();
+        break;
+        
+    
+    case 'admin_magazine_detail':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_magazine_detail($_GET['id']);
+        break;
+    
+    case 'viewdocc':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController -> viewdocc($_GET['id']);
+        break;
+    
+    case 'admin_faculty':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController -> faculty();
+        break;
    
     case 'insert_manager':
         require_once 'Controllers/AdminController.php';

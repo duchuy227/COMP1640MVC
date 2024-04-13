@@ -1,6 +1,7 @@
 <?php
 require_once 'Models/AdminModel.php';
 require_once 'UserController.php';
+use PhpOffice\PhpWord\IOFactory;
 
 class AdminController {
     private  $is_login;
@@ -349,7 +350,7 @@ class AdminController {
         ob_start();
         if($this->is_login == true && $_SESSION['role_id'] == 1) {
             $adminModel = new adminModel();
-            $faculty = $adminModel->getAllFaculty() ;
+            $faculty = $adminModel->getAllFaculty();
             $insert = true;
             
                     // Xử lý thêm mới Manager
@@ -437,6 +438,169 @@ class AdminController {
         // Chuyển hướng sau khi xóa thành công
         header('Location: index.php?action=coordinator');
         exit();
+    }
+
+    public function admin_statistics(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $fdata = $adminModel->getContributionCountsByFaculty();
+            $tdata = $adminModel->getContributionByTopic();
+            $sdata = $adminModel->getStudentCountByFaculty();
+            $ddata = $adminModel->getCountContributionByDate();
+
+            require 'views/admin_statistics.php';
+        }
+    }
+
+    public function admin_topic(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $topic = $adminModel -> getAllTopic();
+
+            include 'views/admin_topic.php';
+        }
+    }
+
+    public function admin_add_topic(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $faculty = $adminModel->getAllFaculty();
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if(isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["tmp_name"])){
+                    $imageData = file_get_contents($_FILES["avatar"]["tmp_name"]);
+                } else{
+                    $imageData=null;
+                }
+                $name = $_POST['name'];
+                $startDate = $_POST['start_date'];
+                $closureDate = $_POST['closure_date'];
+                $finalDate = $_POST['final_date'];
+                $description = strip_tags($_POST['description']);
+                $fa_id = $_POST['fa_id']; // Lấy giá trị fa_id từ form
+                // Thêm chủ đề vào cơ sở dữ liệu
+                $adminModel->addTopic($name, $startDate, $closureDate, $finalDate, $description, $imageData, $fa_id);
+                // Chuyển hướng sau khi thêm thành công
+                header('Location: index.php?action=admin_topic');
+                exit();
+
+            } include 'views/admin_add_topic.php';
+        }
+    }
+
+    public function admin_edit_topic($id){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $topics = $adminModel ->getTopicById($id);
+            $faculty = $adminModel->getAllFaculty();
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if(isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["tmp_name"])){
+                    $imageData = file_get_contents($_FILES["avatar"]["tmp_name"]);
+                } else{
+                    $imageData=null;
+                }
+                $name = $_POST['name'];
+                $startDate = $_POST['start_date'];
+                $closureDate = $_POST['closure_date'];
+                $finalDate = $_POST['final_date'];
+                $description = strip_tags($_POST['description']);
+                $fa_id = $_POST['fa_id']; // Lấy giá trị fa_id từ form
+                // Thêm chủ đề vào cơ sở dữ liệu
+                $adminModel->updateTopic($id, $name, $startDate, $closureDate, $finalDate, $description, $imageData, $fa_id);
+                // Chuyển hướng sau khi thêm thành công
+                header('Location: index.php?action=admin_topic');
+                exit();
+
+            } 
+
+            include 'views/admin_edit_topic.php';
+        }
+
+    }
+
+    public function admin_topic_detail($id){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $topics = $adminModel ->getTopicById($id);
+
+            include 'views/admin_topic_detail.php';
+        }
+    }
+
+    public function admin_delete_topic($id){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $adminModel ->deleteTopic($id);
+
+            header('Location: index.php?action=admin_topic');
+            exit();
+        }
+    }
+
+    public function admin_magazine(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $maga = $adminModel ->getAllMagazine();
+            
+
+            include 'views/admin_magazine.php';
+        }
+    }
+
+    public function admin_magazine_detail($id){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $maga = $adminModel ->getMagazineDetailsById($id);
+            
+
+            include 'views/admin_magazine_detail.php';
+        }
+    }
+
+    public function viewdocc($id){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $maga = $adminModel ->getMagazineDetailsById($id);
+
+            $docxFilePath = $maga['Con_Doc'];
+            $image = $maga['Con_Image'];
+
+            require 'vendor/autoload.php';
+        // Tải tệp DOCX
+        $phpWord = IOFactory::load($docxFilePath);
+        // Trích xuất tất cả các hình ảnh từ tệp DOCX
+        // Lấy nội dung của tệp DOCX dưới dạng HTML
+        $html = '';
+        foreach ($phpWord->getSections() as $section) {
+            foreach ($section->getElements() as $element) {
+                if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                    // Xử lý phần tử TextRun
+                    foreach ($element->getElements() as $textElement) {
+                        if ($textElement instanceof \PhpOffice\PhpWord\Element\Text) {
+                            // Xử lý phần tử Text
+                            $html .= $textElement->getText();
+                        } elseif ($textElement instanceof \PhpOffice\PhpWord\Element\TextBreak) {
+                            // Xử lý phần tử TextBreak
+                            $html .= "<br>";
+                        }
+                    }
+                }
+            }
+        }
+    
+        include 'views/showAdminDoc.php';
+        }
+    }
+
+    public function faculty(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $faculty = $adminModel ->getAllFaculty();
+            
+
+            include 'views/admin_faculty.php';
+        }
     }
 }
 ?>

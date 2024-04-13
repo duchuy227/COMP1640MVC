@@ -84,7 +84,11 @@ include 'PHPMailer/src/SMTP.php';
         
             //Recipients
             $mail->setFrom('leduchuy22072002@gmail.com', $student['Stu_FullName']);
-            $mail->addAddress('huyldgbh200353@fpt.edu.vn');            
+            $recipients = ['huyldgbh200353@fpt.edu.vn', 'hohuy2k2@gmail.com'];
+            
+            foreach ($recipients as $recipient) {
+                // Thêm người nhận cho email
+            $mail->addAddress($recipient); 
             //Content
             $mail->isHTML(true);         
             $mail->addAttachment($uploadPath);                        
@@ -129,7 +133,6 @@ include 'PHPMailer/src/SMTP.php';
             <body>
             <div class="container">
                 <h1>New Contribution Uploaded</h1>
-                <p>Dear Coordinator: ' . $coordinator['coordinator']['Coor_FullName'] . ',</p>
                 <p>A new contribution has been uploaded by student <strong>' . $student['Stu_FullName'] . '</strong> on <strong>' . $submissionDate . '</strong>.</p>
                 <p><strong>Contribution Name:</strong> ' . $contributionName . '</p>
                 <span>Please log in and review them as soon as possible. </span>
@@ -141,6 +144,7 @@ include 'PHPMailer/src/SMTP.php';
                         
             ';   
             $mail->send();
+        }
             // echo 'Message has been sent';
         } catch (Exception $e) {
         

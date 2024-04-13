@@ -18,7 +18,7 @@ class UserModel{
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
                     // Kiểm tra mật khẩu
-                    if ($result['Ad_Password'] === $password) {
+                    if (!empty($result) &&$result['Ad_Password'] === $password) {
                         return true; // Đăng nhập thành công
                     } else {
                         return false; // Mật khẩu không chính xác
@@ -34,7 +34,7 @@ class UserModel{
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
                     // Kiểm tra mật khẩu
-                    if ($result['Stu_Password'] === $password) {
+                    if (!empty($result) &&$result['Stu_Password'] === $password) {
                         return true; // Đăng nhập thành công
                     } else {
                         return false; // Mật khẩu không chính xác
@@ -49,7 +49,7 @@ class UserModel{
                     $sql = $this->conn->prepare($query);
                     $sql->execute(array(":username"=> $username));
                     $result = $sql->fetch(PDO::FETCH_ASSOC);
-                    if($result['Ma_Password'] == $password){
+                    if(!empty($result) &&$result['Ma_Password'] == $password){
                         return true;                  
                     }
                     else{
@@ -61,7 +61,7 @@ class UserModel{
                     $sql = $this->conn->prepare($query);
                     $sql->execute(array(":username"=> $username));
                     $result = $sql->fetch(PDO::FETCH_ASSOC);
-                    if($result['Coor_Password'] == $password){
+                    if(!empty($result) &&$result['Coor_Password'] == $password){
                         $_SESSION['userid'] =  $result['Coor_ID'] ;
                         return true;  
                     } else{

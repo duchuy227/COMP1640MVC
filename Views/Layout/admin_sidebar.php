@@ -29,8 +29,8 @@
         top: 0;
         left: 0;
         bottom: 0;
-        width: 125px;
-        height: 100vh;
+        width: 100px;
+        height: 120vh;
         padding: 0 1.7rem;
         color: #fff;
         overflow: hidden;
@@ -39,24 +39,24 @@
     }
 
     .sidebar:hover {
-        width: 270px;
+        width: 250px;
         transition: 0.5s;
     }
 
     .logo {
-        height: 80px;
-        padding: 16px;
+        
+        padding: 26px;
     }
 
     .menu {
-        height: 88%;
+        height: 100%;
         position: relative;
         list-style: none;
         padding: 0;
     }
 
     .menu li {
-        padding: 1rem;
+        padding: 0.8rem;
         margin: 8px 0;
         border-radius: 10px;
         transition: all 0.5s ease-in-out;
@@ -74,11 +74,11 @@
 
     .menu a {
         color: #fff;
-        font-size: 15px;
+        font-size: 14px;
         text-decoration: none;
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1.2rem;
     }
 
 
@@ -88,7 +88,7 @@
     }
 
     .menu a i {
-        font-size: 1.2rem;
+        font-size: 1rem;
         text-decoration: none;
         color: #fff;
     }
@@ -279,7 +279,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="index.php?action=admin_statistics">
                     <i class="fa-solid fa-chart-column"></i>
                     <span>Statistics</span>
                 </a>
@@ -303,12 +303,30 @@
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <i class="bi bi-book-fill"></i>
-                    <span>Contribution</span>
+                <a href="index.php?action=admin_faculty">
+                    <i class="bi bi-backpack4-fill"></i>    
+                    <span>Faculty</span>
                 </a>
             </li>
-            <li class="logout">
+            <li>
+                <a href="index.php?action=admin_magazine">
+                    <i class="bi bi-book-fill"></i>
+                    <span>Magazine</span>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?action=admin_topic">
+                    <i class="bi bi-bookmarks-fill"></i>
+                    <span>Topic</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-chat-right-dots-fill"></i>
+                    <span>Message</span>
+                </a>
+            </li>
+            <li>
                 <a href="index.php?action=logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Log Out</span>

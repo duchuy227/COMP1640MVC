@@ -23,7 +23,7 @@
 				<div class="content-data">
                     <h4 style="color: #511F90; text-transform:uppercase; text-align:center; font-weight:bolder; font-size: 30px">All Topics</h4>
                     <br>
-                        <table class="table table-bordered border-bold">
+                    <table class="table table-bordered border-bold">
                             <thead class="thead-dark">
                                 <tr style="text-align:center; background-color:#7388C1; font-weight:bold" class="table bordered">
                                     <td scope="col">Name</td>
@@ -51,7 +51,7 @@
                                 </td>                                
                             </tr>
                             <?php endforeach; ?>
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>

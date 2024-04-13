@@ -121,9 +121,7 @@
         }
 </style>
 <body>
-    <?php 
-        include 'Layout/admin_sidebar.php'
-    ?>
+    <?php include 'Layout/admin_sidebar.php'?>
     <div class="main--content">
         <?php include 'Layout/admin_navbar.php' ?>
         <div class="tabular--wrapper">
