@@ -185,35 +185,21 @@
             font-weight: bold; 
             margin-top: 30px; 
             font-family:Arial, Helvetica, sans-serif;
-            margin-left: 80px;
+            margin-left: 300px;
             margin-right: 80px;
             text-transform: uppercase;
             margin-bottom: 30px;
             font-size: 40px;
             font-family: "Roboto", sans-serif;
+            
         }
     </style>
 <body>
     <div class="main--content">
         <div class="header--wrapper">
             <div class="header--title">
-                <div style="margin-left: 20px" class="row">
-                    <i style="margin-top: 30px; font-size: 40px;"
-                    class="fa-solid fa-heart"></i>
-
-                    <i style="margin-top: 30px; font-size: 40px; margin-left:10px"
-                    class="fa-solid fa-heart"></i>
-                    <i style="margin-top: 30px; font-size: 40px; margin-left:10px"
-                    class="fa-solid fa-heart"></i>
-                
+                <div style="margin-left: 20px" class="row">              
                     <h6>Welcome to Admin Page</h6>
-
-                    <i style="margin-top: 30px; font-size: 40px;"
-                    class="fa-solid fa-heart"></i>
-                    <i style="margin-top: 30px; font-size: 40px;margin-left:10px"
-                    class="fa-solid fa-heart"></i>
-                    <i style="margin-top: 30px; font-size: 40px;margin-left:10px"
-                    class="fa-solid fa-heart"></i>
                 </div>
             </div>
             <div class="user--info">

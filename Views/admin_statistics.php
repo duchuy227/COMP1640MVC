@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<style>
+    <style>
         .main--content {
             position: relative;
             background: #ebe9e9;
@@ -155,7 +155,7 @@
             text-align: center;
             color: #4B0082;
         }
-</style>
+    </style>
 <body>
     <?php 
         include 'Layout/admin_sidebar.php'
@@ -164,7 +164,7 @@
         <?php include 'Layout/admin_navbar.php' ?>
         <div class="tabular--wrapper">
             <h2>Statistics</h2>
-            <br>
+            
             <hr style="background-color: #4B0082; height:5px">
             <h3>Faculty Contribution</h3>
             <br>
