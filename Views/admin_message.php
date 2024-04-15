@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Faculty</title>
+    <title>Message</title>
 </head>
 <style>
         .main--content {
@@ -70,33 +70,52 @@
     <div class="main--content">
         <?php include 'Layout/admin_navbar.php' ?>
         <div class="tabular--wrapper">
-            <h2>All Faculties</h2>
+            <h2>All Mail</h2>
             <div style="margin-bottom: 20px" class="row">
                 
                 <table class="table table-bordered border-bold">
                     <thead class="thead-dark">
                         <tr style="text-align:center; background-color:#7388C1; font-weight:bold" class="table bordered">
-                            <td scope="col">ID</td>
-                            <td scope="col">Faculty Name</td>
-                            <!-- <td></td> -->
+                            <td scope="col">Student</td>
+                            <td scope="col">Coordinator</td>
+                            <td scope="col">Mail Content</td>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($faculty as $fa): ?>
+                        <?php foreach ($mess as $mess): ?>
                         <tr class="table bordered" style=" background-color: #A095C4; text-align:center">
-                            <td scope="row"><?php echo $fa['Fa_ID'] ?></td>
-                            <td scope="row"><?php echo $fa['Fa_Name'] ?></td>
-                            <!-- <td>
-                                <button class="btn btn-success">
-                                    <a style="text-decoration: none; color:#fff" 
-                                    href="index.php?action=admin_edit_faculty&id=<?php echo $fa['Fa_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
-                                </button>
+                            <td scope="row"><?php echo $mess['Stu_FullName'] ?></td>
+                            <td scope="row"><?php echo $mess['Coor_FullName'] ?></td>
+                            <td scope="row">
+                                <textarea style="background: transparent;" name="" id="" cols="30"><?php echo $mess['Content'] ?></textarea>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                                <button class="btn btn-danger">
-                                    <a style="text-decoration: none; color:#fff"  
-                                    href="index.php?action=admin_delete_faculty&id=<?php echo $fa['Fa_ID']; ?>" onclick="return confirm('Do you want to delete this account')"><i class="bi bi-trash"></i></a>
-                                </button>
-                            </td>                                 -->
+        <div class="tabular--wrapper">
+            <h2>All Comments</h2>
+            <div style="margin-bottom: 20px" class="row">
+                
+                <table class="table table-bordered border-bold">
+                    <thead class="thead-dark">
+                        <tr style="text-align:center; background-color:#7388C1; font-weight:bold" class="table bordered">
+                            <td scope="col">Student</td>
+                            <td scope="col">Coordinator</td>
+                            <td scope="col">Comment Detail</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($comment as $comment): ?>
+                        <tr class="table bordered" style=" background-color: #A095C4; text-align:center">
+                            <td scope="row"><?php echo $comment['Con_Name'] ?></td>
+                            <td scope="row"><?php echo $comment['Coor_FullName'] ?></td>
+                            <td scope="row">
+                                <textarea style="background: transparent;" name="" id="" cols="30"><?php echo $comment['Com_Detail'] ?></textarea>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

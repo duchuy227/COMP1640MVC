@@ -602,5 +602,16 @@ class AdminController {
             include 'views/admin_faculty.php';
         }
     }
+
+    public function admin_message(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+            $adminModel = new AdminModel();
+            $mess = $adminModel ->getAllMessage();
+            $comment = $adminModel ->getAllComment();
+            
+
+            include 'views/admin_message.php';
+        }
+    }
 }
 ?>

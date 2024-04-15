@@ -87,6 +87,12 @@ switch ($action) {
         $adminController = new AdminController();
         $adminController -> faculty();
         break;
+    
+    case 'admin_message':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController -> admin_message();
+        break;
    
     case 'insert_manager':
         require_once 'Controllers/AdminController.php';

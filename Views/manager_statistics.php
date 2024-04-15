@@ -15,8 +15,8 @@
 </head>
     <style>
         .faculty-contri {
-            width: 400px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             position: relative;
             overflow: hidden;
         }

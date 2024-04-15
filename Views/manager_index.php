@@ -51,13 +51,15 @@
                         <canvas id="topicChart"></canvas>
                     </div>
 				</div>
-				<div class="content-data">
+			</div>
+            <div class="data">
+            <div class="content-data">
                     <div class="falcuty-student">
                         <h4 style="color: #009966; text-transform:uppercase; text-align:center">Student Faculty Chart</h4>
                         <canvas id="studentChart"></canvas>
                     </div>
                 </div>
-			</div>
+            </div>
 		</main>
 		<!-- MAIN -->
 	</section>

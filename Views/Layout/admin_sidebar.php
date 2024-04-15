@@ -321,7 +321,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="index.php?action=admin_message">
                     <i class="bi bi-chat-right-dots-fill"></i>
                     <span>Message</span>
                 </a>

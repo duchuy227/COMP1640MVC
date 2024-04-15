@@ -572,5 +572,30 @@ class AdminModel
         $sql->execute(array(':maga_id'=> $maga_id));
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getAllMessage(){
+        $query = "SELECT Mail.*, 
+                    Student.Stu_FullName AS Stu_FullName,
+                    Coordinator.Coor_FullName AS Coor_FullName
+                    FROM Mail
+                    JOIN Student ON Mail.Stu_ID = Student.Stu_ID
+                    JOIN Coordinator ON Mail.Coor_ID = Coordinator.Coor_ID;";
+        $sql = $this->conn->prepare($query);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public function getAllComment(){
+        $query = "SELECT Comments.*, 
+        Contribution.Con_Name AS Con_Name,
+        Coordinator.Coor_FullName AS Coor_FullName
+        FROM Comments
+        JOIN Contribution ON Comments.Con_ID = Contribution.Con_ID
+        JOIN Coordinator ON Comments.Coor_ID = Coordinator.Coor_ID;";
+        $sql = $this->conn->prepare($query);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
