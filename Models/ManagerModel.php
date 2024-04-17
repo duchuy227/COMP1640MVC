@@ -128,17 +128,6 @@
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        // public function getContributionSelectedDoc()
-        // {
-        //     $query = "SELECT Con_Doc FROM contribution where Con_Status = 'Approval'";
-        //     $sql = $this->conn->prepare($query);
-        //     $documents = [];
-        //     while ($row = $sql->fetch()) {
-        //         $documents[] = $row['Con_Doc'];
-        //     }
-        
-        //     return $documents;
-        // }
 
         public function getContributionByID($id)
         {

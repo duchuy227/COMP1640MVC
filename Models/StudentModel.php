@@ -14,7 +14,8 @@ class StudentModel
         $query = "INSERT INTO Contribution (Con_Name, Con_SubmissionTime, Con_Status, Con_Doc, Con_Image, Stu_ID, Topic_ID,Con_Description) 
                 VALUES (:name, :submissionTime, :status, :doc, :image, :stu_ID, :topic_ID,:con_description)";
         $sql = $this->conn->prepare($query);
-        $sql->execute(array(':name' => $conname, ':submissionTime' => $subDate, ':status' => $status, ':doc' => $doc, ':image' => $image, ':stu_ID' => $stuID, ':topic_ID' => $topicID,':con_description'=> $description));
+        $sql->execute(array(':name' => $conname, ':submissionTime' => $subDate, ':status' => $status, ':doc' => $doc, 
+        ':image' => $image, ':stu_ID' => $stuID, ':topic_ID' => $topicID,':con_description'=> $description));
     }
 
     public function getStudentbyUserName($username)

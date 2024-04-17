@@ -124,52 +124,44 @@ class AdminModel
 
     public function validateStudent($id, $username, $password, $email, $dob, $roleId, $fullname, $imageData, $insert) {
         $errors = [];
-    
-        // Validate username
         if (!preg_match('/^\w{4,10}$/', $username)) {
-            $errors['username'] = 'Username không hợp lệ';
+            $errors['username'] = 'Invalid username';
         } elseif ($insert == true && $this->checkStudentExists($username)) {
-            $errors['username'] = 'Username đã tồn tại';
+            $errors['username'] = 'Username exsited';
         } elseif ($insert == false && $this->checkStudentExists($username, $id)) {
-            $errors['username'] = 'Username đã tồn tại';
+            $errors['username'] = 'Username exsited';
         }
         
     
-        // Validate password
         if (strlen($password) < 6) {
-            $errors['password'] = 'Password phải có ít nhất 6 ký tự';
+            $errors['password'] = 'Password must have 6 characters';
         } elseif (!preg_match('/[A-Z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái in hoa';
+            $errors['password'] = 'Password must have at least 1 uppercase character';
         } elseif (!preg_match('/[a-z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái viết thường';
+            $errors['password'] = 'Password must have at least 1 lowercase character';
         } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 ký tự đặc biệt';
+            $errors['password'] = 'Password must have at least 1 special character';
         } elseif (!preg_match('/[\d]/', $password)){
-            $errors['password'] = 'Password phải có ít nhất 1 số';
+            $errors['password'] = 'Password must have at least 1 number';
         }
-
-        
 
         if($insert == true && $this->checkEmailStudentExists($email)){
-            $errors['email'] = 'Email đã tồn tại';
+            $errors['email'] = 'Email exsited';
         } elseif ($insert == false && $this->checkEmailStudentExists($email, $id)) {
-            $errors['email'] = 'Email đã tồn tại';
+            $errors['email'] = 'Email exsited';
         }
 
         if (!preg_match('/^[A-Z]/', $fullname)){
-            $errors['fullname'] = 'Fullname phải bắt đầu bằng chữ cái in hoa';
+            $errors['fullname'] = 'Full name must start with a capital letter';
         } elseif (!preg_match('/^[A-Za-z\s\x{00C0}-\x{1FFF}\x{2C00}-\x{D7FF}]+$/u', $fullname)) {
-            $errors['fullname'] = 'Fullname chỉ được chứa chữ cái và khoảng trắng';
+            $errors['fullname'] = 'Fullname must include space and character';
         } elseif (preg_match('/[0-9!@#$%^&*(),.?":{}|<>]/', $fullname)) {
-            $errors['fullname'] = 'Fullname không được chứa số hoặc ký tự đặc biệt';
+            $errors['fullname'] = 'Fullname cannot contain numbers or special characters';
         }
 
-
-        // Validate imageData
         if (!isset($imageData)) {
-            $errors['imageData'] = 'Avatar không được để trống';
+            $errors['imageData'] = 'Avatar cannot be empty';
         } 
-    
         return $errors;
     } 
 
@@ -191,15 +183,15 @@ class AdminModel
 
     public function checkStudentExists($username, $id = null) {
         $query = "SELECT * FROM Student WHERE Stu_Username = ?";
-        $params = [$username]; // Tạo mảng chứa tham số cho truy vấn
+        $params = [$username];
         
         if ($id !== null) {
             $query .= " AND Stu_ID != ?";
-            $params[] = $id; // Thêm $id vào mảng tham số
+            $params[] = $id; 
         }
         
         $statement = $this->conn->prepare($query);
-        $statement->execute($params); // Sử dụng mảng tham số trong execute()
+        $statement->execute($params);
     
         return $statement->rowCount() > 0;
     }
@@ -236,15 +228,15 @@ class AdminModel
 
     public function checkEmailStudentExists($email, $id=null) {
         $query = "SELECT * FROM Student WHERE Stu_Email = ?";
-        $params = [$email]; // Tạo mảng chứa tham số cho truy vấn
+        $params = [$email];
         
         if ($id !== null) {
             $query .= " AND Stu_ID != ?";
-            $params[] = $id; // Thêm $id vào mảng tham số
+            $params[] = $id; 
         }
         
         $statement = $this->conn->prepare($query);
-        $statement->execute($params); // Sử dụng mảng tham số trong execute()
+        $statement->execute($params);
     
         return $statement->rowCount() > 0;
     }

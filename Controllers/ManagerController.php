@@ -223,9 +223,6 @@
 
                     header("Content-type: application/zip");
                     header("Content-Disposition: attachment; filename=$zipFileName");
-                        // header("Pragma: no-cache");
-                        // header("Expires: 0");
-
 
                     readfile($zipFileName);
 

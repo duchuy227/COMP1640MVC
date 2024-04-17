@@ -107,7 +107,8 @@
             ?>
             </p>
             <div class="button">
-                <button class="btn red-btn"><a style="color: #fff; text-decoration:none" href="index.php?action=student_contribution_detail&id=<?php echo $contribution['Con_ID'] ?>">Back</a></button>
+                <button class="btn red-btn"><a style="color: #fff; text-decoration:none" 
+                href="index.php?action=student_contribution_detail&id=<?php echo $contribution['Con_ID'] ?>">Back</a></button>
             </div>
         </div>
     </div>

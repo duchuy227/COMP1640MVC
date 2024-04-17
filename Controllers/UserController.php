@@ -36,17 +36,12 @@ class UserController{
 
     public function login() {
         ob_start();
-        
             $_SESSION['is_login'] = false;
-            // include 'views/userlogin.php';
             if(isset($_SESSION['is_login']) && $_SESSION['is_login'] == false) {
-                // include 'views/userlogin.php';
-            
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $username = $_POST['username'];
                     $password = $_POST['password'];
                     $role_id = $_POST['role_id'];
-                    
                     $usermodel = new UserModel();
                     $user = $usermodel->check_login($username, $password, $role_id);
                     
@@ -70,17 +65,13 @@ class UserController{
                             default: break;
                         } 
                     } else {
-                    
                         $_SESSION['error_message'] = "Invalid Information";
                         $_SESSION['is_login'] = false;
-                        // header('Location: index.php?action=login');           
-                        // exit();
                     }
                 }  
             } else {
                 header('Location: index.php');   
             } include 'views/userlogin.php';
-        
         ob_end_flush();
     }
     
