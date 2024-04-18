@@ -281,7 +281,7 @@ include 'PHPMailer/src/SMTP.php';
                 $time = time();
                 $currentTime = $time - (7 * 3600);
                 $submissionDate = date('Y-m-d H:i:s', $currentTime);
-                $topicID = $_POST['Topic_ID'];
+                // $topicID = $_POST['Topic_ID'];
                 $con_id= $_POST['Con_ID'];
                 $con_name = $_POST['Con_Name'];
                 $con_des = strip_tags($_POST['Con_Description']);
@@ -305,8 +305,8 @@ include 'PHPMailer/src/SMTP.php';
                                 $uploadPath = "Upload/" . $fileName;
                             }
                     if (move_uploaded_file($temp, $uploadPath)) {
-                        $studentModel -> updateContribution($con_id,$con_name,$con_des,$imageData, $uploadPath);
-                        $this->mailNotiToCoordinator($student,$submissionDate,$contributionName,$topicID,$uploadPath, $coordinator);
+                        $studentModel -> updateContribution($con_id,$con_name,$con_des, $imageData, $uploadPath);
+                        // $this->mailNotiToCoordinator($student,$submissionDate,$contributionName,$topicID,$uploadPath, $coordinator);
                         header("location: index.php?action=student_contribution");
                         exit;
                     }
