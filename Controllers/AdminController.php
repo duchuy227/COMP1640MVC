@@ -24,6 +24,18 @@ class AdminController {
         
     }
 
+    public function admin_index(){
+        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+        $adminModel = new AdminModel();
+        $totalAccounts = $adminModel->getAllAccount();
+
+        $totalContributions = $adminModel->getTotalContributions();
+
+        $totalComments = $adminModel->getTotalComment();
+        include 'admin_index.php';
+        }
+    }
+
     public function update_admin($id){
         ob_start();
         if($this->is_login == true && isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) {
@@ -41,7 +53,7 @@ class AdminController {
                 }
 
                 $username = $_POST['username'];
-                $password = $_POST['password'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];         
                 $dob = $_POST['dob'];
                 $roleId = $_POST['role_id'];
@@ -54,12 +66,6 @@ class AdminController {
                     header('Location: index.php?action=admin');           
                     exit();
                 } 
-
-                // $adminModel = new AdminModel();
-                // $adminModel->updateAdminAccount($id, $username, $password, $email,  $dob, $roleId, $imageData);
-                //     // Chuyển hướng sau khi cập nhật thành công
-                // header('Location: index.php?action=admin');           
-                // exit();
 
             } include 'views/admin_edit_profile.php';
         } else {
@@ -173,7 +179,7 @@ class AdminController {
                         $imageData=null;
                     }
                 $username = $_POST['username'];
-                $password = $_POST['password'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];
                 $dob = $_POST['dob'];
                 $roleId = $_POST['role_id'];
@@ -213,7 +219,7 @@ class AdminController {
                     $imageData = base64_decode($image);                  
                 }
                 $username = $_POST['username'];
-                $password = $_POST['password'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];         
                 $dob = $_POST['dob'];
                 $roleId = $_POST['role_id'];
@@ -256,9 +262,6 @@ class AdminController {
             $adminModel = new AdminModel();
             $faculty = $adminModel->getAllFaculty();
             $insert = true;
-            
-
-    
             # Xử lý thêm mới student
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if(isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["tmp_name"])){
@@ -269,7 +272,7 @@ class AdminController {
                 }
                         
                 $username = $_POST['username'];
-                $password = $_POST['password'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];
                 $fullname = $_POST['fullname'];
                 $dob = $_POST['dob'];
@@ -313,7 +316,7 @@ class AdminController {
                         $imageData = base64_decode($image);                  
                     }
                     $username = $_POST['username'];
-                    $password = $_POST['password'];
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                     $email = $_POST['email'];
                     $fullname = $_POST['fullname'];
                     $dob = $_POST['dob'];
@@ -362,7 +365,7 @@ class AdminController {
                                 $imageData=null;
                             }
                         $username = $_POST['username'];
-                        $password = $_POST['password'];
+                        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                         $email = $_POST['email'];
                         $fullname = $_POST['fullname'];
                         $dob = $_POST['dob'];
@@ -408,7 +411,7 @@ class AdminController {
                 }
                 
                         $username = $_POST['username'];
-                        $password = $_POST['password'];
+                        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                         $email = $_POST['email'];
                         $fullname = $_POST['fullname'];
                         $dob = $_POST['dob'];
@@ -590,6 +593,7 @@ class AdminController {
         }
     
         include 'views/showAdminDoc.php';
+        include 'views/magazine_detail.php';
         }
     }
 
@@ -613,5 +617,72 @@ class AdminController {
             include 'views/admin_message.php';
         }
     }
+
+    public function university(){
+        $adminModel = new AdminModel();
+        $university = $adminModel ->getAllTopic();
+        $uni = $adminModel -> getContributionByTopic();
+
+
+        include 'views/university_index.php';
+    }
+
+    public function about(){
+        $adminModel = new AdminModel();
+
+        include 'views/about.php';
+    }
+
+    public function magazine(){
+        $adminModel = new AdminModel();
+        $maga = $adminModel ->getAllMagazine();
+
+        include 'views/magazine.php';
+    }
+
+    public function magazine_detail($id){
+        $adminModel = new AdminModel();
+        $maga = $adminModel ->getMagazineDetailsById($id);
+        $docxFilePath = $maga['Con_Doc'];
+            $image = $maga['Con_Image'];
+
+            require 'vendor/autoload.php';
+        // Tải tệp DOCX
+        $phpWord = IOFactory::load($docxFilePath);
+        // Trích xuất tất cả các hình ảnh từ tệp DOCX
+        // Lấy nội dung của tệp DOCX dưới dạng HTML
+        $html = '';
+        foreach ($phpWord->getSections() as $section) {
+            foreach ($section->getElements() as $element) {
+                if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                    // Xử lý phần tử TextRun
+                    foreach ($element->getElements() as $textElement) {
+                        if ($textElement instanceof \PhpOffice\PhpWord\Element\Text) {
+                            // Xử lý phần tử Text
+                            $html .= $textElement->getText();
+                        } elseif ($textElement instanceof \PhpOffice\PhpWord\Element\TextBreak) {
+                            // Xử lý phần tử TextBreak
+                            $html .= "<br>";
+                        }
+                    }
+                }
+            }
+        }
+
+        include 'views/magazine_detail.php';
+    }
+
+    public function magazine_content(){
+        $adminModel = new AdminModel();
+        
+    }
+
+    public function contact(){
+        $adminModel = new AdminModel();
+
+        include 'views/contact.php';
+    }
+
+    
 }
 ?>

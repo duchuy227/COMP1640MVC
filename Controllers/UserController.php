@@ -13,7 +13,7 @@ class UserController{
         
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $username = $_POST['username'];
-                $password = $_POST['password'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];
                 $fullname = $_POST['fullname'];
                 $dob=$_POST['dob'];
@@ -51,7 +51,7 @@ class UserController{
                         $_SESSION['role_id'] = $role_id;
                         switch($_SESSION['role_id']) {
                             case 1:
-                                header('location:admin_index.php');
+                                header('location: index.php?action=admin_index');
                                 exit();
                             case 2:
                                 header('location:index.php?action=student_index'); 

@@ -110,9 +110,24 @@ class StudentModel
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':id'=> $id));
         return $sql->fetchAll(PDO::FETCH_ASSOC);
-        
-
     }
+
+    public function getTopicRow($id)
+        {
+
+            $query = "SELECT * FROM topic WHERE Fa_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id'=> $id));
+            return $sql->rowCount();
+        }
+    
+        public function getAllStudentByCoordinatorRow($fa_id) {
+            $query = "SELECT * FROM student WHERE Fa_ID = :fa_id"; // Thêm :fa_id vào câu truy vấn
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':fa_id' => $fa_id));
+            return $sql->rowCount();
+        }
+    
     public function numberOfContribution($username)
     {
         $student = $this->getStudentbyUserName($username);

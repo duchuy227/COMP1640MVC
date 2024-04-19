@@ -17,6 +17,15 @@
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        public function getTopic($id)
+        {
+
+            $query = "SELECT * FROM topic WHERE Fa_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id'=> $id));
+            return $sql->rowCount();
+        }
+
         public function getCoordinatorbyUserName($username)
         {
             $query = "SELECT coordinator.*, faculty.Fa_Name FROM coordinator
@@ -32,6 +41,13 @@
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':fa_id' => $fa_id));
             return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        public function getAllStudentByCoordinatorRow($fa_id) {
+            $query = "SELECT * FROM student WHERE Fa_ID = :fa_id"; // Thêm :fa_id vào câu truy vấn
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':fa_id' => $fa_id));
+            return $sql->rowCount();
         }
 
         public function updateCoordinatorProfile($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id, $imageData) {
@@ -76,6 +92,19 @@
             $sql->execute();
         
             return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        public function getAllContributionByFacultyRow($faculty_id) {
+            $query = "SELECT Contribution.*, Student.Stu_FullName
+                      FROM Contribution
+                      JOIN Student ON Contribution.Stu_ID = Student.Stu_ID
+                      WHERE Student.Fa_ID = :fa_id";
+            
+            $sql = $this->conn->prepare($query);
+            $sql->bindValue(':fa_id', $faculty_id, PDO::PARAM_INT);
+            $sql->execute();
+        
+            return $sql->rowCount();
         }
 
         public function getContributionByID($id)

@@ -36,12 +36,16 @@ nav {
     align-items: center;
     padding: 1vw 8vw;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
-    
+    z-index: 999;
 }
 
 nav img {
     width: 170px;
     cursor: pointer;
+}
+
+nav .navigation {
+    display: flex;
 }
 
 nav .navigation ul {
@@ -169,7 +173,7 @@ nav .navigation ul li a:hover {
 }
 
 #course {
-    padding: 8vw 8vw 0 8vw;
+    padding: 8vw 8vw 8vw 8vw;
     text-align: center;
 }
 
@@ -202,6 +206,9 @@ nav .navigation ul li a:hover {
     color: #fdc93b;
     font-size: .9rem;
 }
+
+
+
 
 
 

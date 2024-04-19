@@ -11,10 +11,52 @@ switch ($action) {
             exit;
         }
         else{
-            header("Location:./views/university_index.php ");
+            header("Location: index.php?action=university");
             exit;
         }
-      
+    
+    case 'admin_index':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->admin_index();
+        break;
+    
+    case 'university':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->university();
+        break;
+    
+    case 'about':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->about();
+        break;
+    
+    case 'magazine':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->magazine();
+        break;
+    
+    case 'magazine_detail':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->magazine_detail($_GET['id']);
+        break;
+    
+    case 'magazine_content':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->magazine_content();
+        break;
+    
+    case 'contact':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->contact();
+        break;
+
     case 'admin':
         require_once 'Controllers/AdminController.php';
         $adminController = new AdminController();

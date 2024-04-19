@@ -196,31 +196,31 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Total users</span>
-                            <span class="amount--value">500</span>
+                            <span class="amount--value"><?php echo $totalAccounts[0]['Total_Accounts']; ?></span>
                         </div>
                         <i class="fa-regular fa-user dark-red"></i>
                     </div>
-                    <span class="card-detail">**** **** **** ***</span>
+                    <span class="card-detail"></span>
                 </div>
                 <div class="payment--card light-blue">
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Total contributions</span>
-                            <span class="amount--value">500</span>
+                            <span class="amount--value"><?php echo $totalContributions ?></span>
                         </div>
                         <i class="fa-regular fa-bookmark dark-blue"></i>
                     </div>
-                    <span class="card-detail">**** **** **** ***</span>
+                    <span class="card-detail"></span>
                 </div>
                 <div class="payment--card light-green">
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Total comments</span>
-                            <span class="amount--value">500</span>
+                            <span class="amount--value"><?php echo $totalComments[0]['Total_Comments']; ?></span>
                         </div>
                         <i class="fa-regular fa-comments"></i>
                     </div>
-                    <span class="card-detail">**** **** **** ***</span>
+                    <span class="card-detail"></span>
                 </div>
             </div>
         </div>

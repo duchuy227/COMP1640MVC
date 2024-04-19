@@ -18,7 +18,7 @@ class UserModel{
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
                     // Kiểm tra mật khẩu
-                    if (!empty($result) &&$result['Ad_Password'] === $password) {
+                    if (!empty($result) && password_verify($password, $result['Ad_Password'])) {
                         return true; // Đăng nhập thành công
                     } else {
                         return false; // Mật khẩu không chính xác
@@ -34,7 +34,7 @@ class UserModel{
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
                     // Kiểm tra mật khẩu
-                    if (!empty($result) &&$result['Stu_Password'] === $password) {
+                    if (!empty($result) && password_verify($password, $result['Stu_Password'])) {
                         return true; // Đăng nhập thành công
                     } else {
                         return false; // Mật khẩu không chính xác
@@ -49,7 +49,7 @@ class UserModel{
                     $sql = $this->conn->prepare($query);
                     $sql->execute(array(":username"=> $username));
                     $result = $sql->fetch(PDO::FETCH_ASSOC);
-                    if(!empty($result) &&$result['Ma_Password'] == $password){
+                    if(!empty($result) && password_verify($password, $result['Ma_Password'])){
                         return true;                  
                     }
                     else{
@@ -61,7 +61,7 @@ class UserModel{
                     $sql = $this->conn->prepare($query);
                     $sql->execute(array(":username"=> $username));
                     $result = $sql->fetch(PDO::FETCH_ASSOC);
-                    if(!empty($result) &&$result['Coor_Password'] == $password){
+                    if(!empty($result) && password_verify($password, $result['Coor_Password'])){
                         $_SESSION['userid'] =  $result['Coor_ID'] ;
                         return true;  
                     } else{

@@ -34,6 +34,34 @@ class AdminModel
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getAllAccount(){
+        $query = "SELECT SUM(Total_Count) AS Total_Accounts
+            FROM (
+            SELECT COUNT(*) AS Total_Count FROM Student
+            UNION ALL
+            SELECT COUNT(*) AS Total_Count FROM Coordinator
+            UNION ALL
+            SELECT COUNT(*) AS Total_Count FROM Admin
+            UNION ALL
+            SELECT COUNT(*) AS Total_Count FROM Manager
+        ) AS TotalCounts";
+         $sql = $this->conn->query($query);
+         return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTotalContributions(){
+        $query = "SELECT * FROM Contribution";
+        $sql = $this->conn->prepare($query);
+        $sql->execute();
+        return $sql->rowCount();
+    }
+
+    public function getTotalComment(){
+        $query = "SELECT COUNT(*) AS Total_Comments FROM comments;";
+        $sql = $this->conn->query($query);
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     public function getAllManagerAccount()
     {
@@ -350,10 +378,14 @@ class AdminModel
 
     public function getStudentAccountById($id)
     {
-        $query = "SELECT student.*,faculty.Fa_Name   from student INNER Join faculty   WHERE Stu_ID = :id";
+        $query = "SELECT student.*, faculty.Fa_Name, student.Stu_Password AS Encrypted_Password
+                  FROM student 
+                  INNER JOIN faculty ON student.Fa_ID = faculty.Fa_ID
+                  WHERE Stu_ID = :id";
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':id' => $id));
-        return $sql->fetch(PDO::FETCH_ASSOC);
+        $result = $sql->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function addStudentAccount($username, $password, $email, $fullname, $dob, $roleId, $fa_id, $imageData)
@@ -589,5 +621,15 @@ class AdminModel
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getTotalContributionByFaculty($id)
+    {
+        $query = "SELECT * FROM contribution where Topic_ID = :id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':id'=> $id));
+        return $sql->rowCount();
+    }
+
+    
 }
 ?>

@@ -8,21 +8,21 @@
 				<li>
                     <i class='bx bxs-book-bookmark'></i>
 					<span class="text">
-						<h3>10</h3>
+						<h3><?php echo $alltp ?></h3>
 						<p>Topics</p>
 					</span>
 				</li>
 				<li>
                     <i class='bx bxs-book-content'></i>
 					<span class="text">
-						<h3>50</h3>
+						<h3><?php echo $allcontri ?></h3>
 						<p>Contribution</p>
 					</span>
 				</li>
 				<li>
                     <i class='bx bxs-group' ></i>
 					<span class="text">
-						<h3>20</h3>
+						<h3><?php echo $allstu ?></h3>
 						<p>Total Student</p>
 					</span>
 				</li>

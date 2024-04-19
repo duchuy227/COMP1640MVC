@@ -8,10 +8,80 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <title>About</title>
+    <title>Magazine Detail</title>
     <link rel="stylesheet" href="./views/Layout/university.css">
 </head>
 <style>
+    #blog-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 8vw;
+    }
+
+    #blog-container .blogs {
+        width: 60%;
+    }
+
+    #blog-container .blogs img {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    #blog-container .blogs .post {
+        padding-bottom: 60px;
+    }
+
+    #blog-container .blogs h3 {
+        color: #101c32;
+        padding: 15px 0 0px 0;
+    }
+
+    #blog-container .blogs h6 {
+        color: #7b838a;
+        font-size: 15px;
+    }
+
+    #blog-container .blogs p {
+        color: #757373;
+        padding-bottom: 20px;
+    }
+
+    #blog-container .blogs a {
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 13px 35px;
+        background-color: rgb(21,21,100);
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    #blog-container .cate {
+        width: 30%;
+    }
+
+    #blog-container .cate h2 {
+        padding-bottom: 7px;
+    }
+
+    #blog-container .cate a {
+        text-decoration: none;
+        color: #757373;
+        font-weight: 500;
+        line-height: 45px;
+    }
+
+    #blog-container .blogpost {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    #blog-container .blogpost p {
+        text-align: justify;
+        padding-bottom: 20px !important;
+    }
+
     nav .navigation {
         display: flex;
     }
@@ -206,24 +276,33 @@
         }
 
         #about-container .about-text {
-            width: 100%;
+            width: 40%;
             padding-bottom: 20px;
-        } 
-
-        #about {
-            flex-direction: column-reverse;
+            word-wrap: break-word;
+        }
+        
+        #blog-container {
+            flex-direction: column;
         }
 
-        #about .about-img {
+        #blog-container .blogs {
             width: 100%;
-            padding-right: 0px;
         }
 
-        #about .about-text {
+        #blog-container .cate {
             width: 100%;
-            padding-bottom: 20px;
         }
 
+        #blog-container .blogpost {
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        #blog-container .blogpost img {
+            width: 100%;
+            height: 50vh;
+            object-fit: cover;
+        }
     }
 
     #about-home {
@@ -246,116 +325,27 @@
         letter-spacing: 1px;
     }
 
-    #about {
-        display: flex;
-        align-items: center;
-        padding: 0vw 8vw 2vw 8vw;
-        width: 100%;
-    }
-
-    #about .about-img {
-        width: 60%;
-        padding-right: 60px;
-    }
-
-    #about .about-img img {
-        width: 100%;
-    }
-
-    #about .about-text {
-        width: 60%;
-        padding: 60px;
-    }
-
-    #about .about-text h2 {
-        color: #29303b;
-        padding-bottom: 15px;
-        font-size: 20px;
-    }
-
-    #about .about-text p {
-        color: #686f7a;
-        font-weight: 300;
-    }
-
-    #about .about-text .about-fe {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-top: 30px;
-    }
-
-    #about .about-text .about-fe img {
-        width: 50px;
-        background-size: cover;
-        background-position: center;
-        margin-right: 20px;
-    }
-
-    #about .about-text .about-fe .fe-text {
-        width: 90%;
-    }
-
-    #about .about-text .about-fe .fe-text h5 {
-        font-size: 16px;
-        color: #29303b;
-    }
-
 </style>
 <body>
     <?php include 'Layout/uni_nav.php'?>
-
     <section id="about-home">
-        <h2>About Greenwich</h2>
+        <h2>Magazine</h2>
     </section>
 
-    <h2 style="text-align: center; margin-top: 30px">About Page</h2>
-
-    <section id="about">
-        <div class="about-img">
-            <img src="./Image/logo.png" alt="">
-        </div>
-        <div class="about-text">
-            <h2>Welcome to Greenwich Magazine, reach your future with Greenwich</h2>
-            <p>Youth gives us many dreams, ambitions as well as choices. 
-            Each person's future will depend on the path we pursue 
-            when we are young.</p>
-            <div class="about-fe">
-                <img src="./Image/fe1.png" alt="">
-                <div class="fe-text">
-                    <h5>5+ Topics</h5>
-                    <p>Youth gives us many dreams, ambitions as well as choices.</p>
-                </div>
-            </div>
-            <div class="about-fe">
-                <img src="./Image/fe2.png" alt="">
-                <div class="fe-text">
-                    <h5>5+ Topics</h5>
-                    <p>Youth gives us many dreams, ambitions as well as choices.</p>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-    <section id="features">
-        <h1>Impressive Features</h1>
-        <p>The university has features such as modern facilities</p>
-        <div class="fea-base">
-            <div class="fea-box">
-                <i class="fas fa-graduation-cap"></i>
-                <h3>Scholarship Facility</h3>
-                <p>Highly qualified teaching staff, diverse study programs and opportunities for research and personal development</p>
-            </div>
-            <div class="fea-box">
-                <i class="fa-solid fa-certificate"></i>
-                <h3>Excited Faculty</h3>
-                <p>Highly qualified teaching staff, diverse study programs and opportunities for research and personal development</p>
-            </div>
-            <div class="fea-box">
-                <i class="fas fa-award"></i>
-                <h3>Global</h3>
-                <p>Highly qualified teaching staff, diverse study programs and opportunities for research and personal development</p>
+    <section id="blog-container">
+        <div class="blogs blogpost">
+            <div class="post">
+                <?php  
+                    echo '<img width="100"  src="data:image/*;base64,' . base64_encode($maga['Con_Image']) . '" />';
+                ?>
+                <h3><?php echo $maga['Con_Name'] ?></h3>
+                <h6>Author: <?php echo $maga['Stu_FullName'] ?></h6>
+                <h6>Create Time: <?php echo $maga['Maga_CreateTime'] ?></h6>
+                <h6>Topic: <?php echo $maga['Topic_Name'] ?></h6>
+                <h6>Faculty: <?php echo $maga['Fa_Name'] ?></h6>
+                <br>
+                <p><?php echo $html ?></p>
+                <a href="index.php?action=magazine">Back to Magazine</a>
             </div>
         </div>
     </section>

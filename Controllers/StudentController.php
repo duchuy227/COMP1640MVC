@@ -159,6 +159,10 @@ include 'PHPMailer/src/SMTP.php';
             $studentModel = new StudentModel();
             $studentInfo = $studentModel->getStudentByUsername($_SESSION['username']);
             $studentsInSameFaculty = $studentModel->getStudentsByFacultyExcludingCurrentUser($_SESSION['username']);
+
+
+            $tp = $studentModel ->getTopicRow($studentInfo["Fa_ID"]);
+            $allStu = $studentModel ->getAllStudentByCoordinatorRow($studentInfo["Fa_ID"]);
             $contribution = $studentModel->getContribution($_SESSION['username']);
             $numContribution = $studentModel->numberOfContribution($_SESSION['username']);
             // Chuyển thông tin sinh viên cho View để hiển thị

@@ -27,11 +27,15 @@
                 $coordinatorModel = new CoordinatorModel();
                 $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
 
+                $alltp = $coordinatorModel ->getTopic($coorInfo["Fa_ID"]);
+
                 // $coor_ID = $_SESSION['fa_id'];
                 $fa_id = $coorInfo['Fa_ID'];
                 $students = $coordinatorModel ->getAllStudentByCoordinator($fa_id);
+                $allstu = $coordinatorModel ->getAllStudentByCoordinatorRow($fa_id);
 
                 $contribution = $coordinatorModel->getAllContributionByFaculty($fa_id);
+                $allcontri = $coordinatorModel ->getAllContributionByFacultyRow($fa_id);
 
                 include 'views/coordinator_index.php';
             }
