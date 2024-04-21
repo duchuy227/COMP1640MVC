@@ -53,7 +53,7 @@
                             <tr class="table bordered" style=" background-color: #d7ede2; text-align:center">
                                 <td scope="row"><?php echo $contribution['Con_Name'] ?></td>
                                 <td scope="row">
-                                    <textarea style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
+                                    <textarea readonly style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
                                 </td>
                                 <td scope="row"><?php echo $contribution['Con_SubmissionTime'] ?></td>
                                 <td scope="row"><?php echo  '<img width="100" style="margin-bottom: 20px"  src="data:image/*;base64,' . base64_encode($contribution['Con_Image']) . '"  />'; ?></td>

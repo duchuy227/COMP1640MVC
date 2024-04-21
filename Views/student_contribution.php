@@ -59,7 +59,7 @@
                             
                                     <td style="border:none; margin-left: 20px" scope="row"><?php echo $student['Con_Name'] ?></td>
                                     <td scope="row">
-                                        <textarea style="border:none; outline:none; background:transparent" cols="30"><?php echo $student['Con_Description'] ?></textarea>
+                                        <textarea readonly style="border:none; outline:none; background:transparent" cols="30"><?php echo $student['Con_Description'] ?></textarea>
                                     </td>
                                     <td scope="row">
                                     <textarea style="border:none; outline:none; background:transparent" cols="30"><?php echo $student['Com_Detail'] ?></textarea>
@@ -72,10 +72,10 @@
                                             href="index.php?action=student_update_contribution&id=<?php echo $student['Con_ID'] ?>"><i class="bi bi-pencil-square"></i></a> 
                                         </button>
 
-                                        <button class="btn btn-danger">
+                                        <!-- <button class="btn btn-danger">
                                             <a style="text-decoration: none; color:#fff" 
                                             href="index.php?action=student_delete_contribution&id=<?php echo $student['Con_ID'] ?>" onclick="return confirm('Do you want to delete this contribution')" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
-                                        </button>
+                                        </button> -->
                                         
                                         <button class="btn btn-primary">
                                             <a style="text-decoration: none; color:#fff"

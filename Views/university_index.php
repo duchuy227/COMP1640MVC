@@ -211,7 +211,7 @@
             when we are young.</p>
         <div class="btn">
             <a href="" class="blue">View More</a>
-            <a href="" class="yellow">Magazine</a>
+            <a href="index.php?action=magazine" class="yellow">Magazine</a>
         </div>
     </section>
 

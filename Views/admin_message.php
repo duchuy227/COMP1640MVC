@@ -87,7 +87,7 @@
                             <td scope="row"><?php echo $mess['Stu_FullName'] ?></td>
                             <td scope="row"><?php echo $mess['Coor_FullName'] ?></td>
                             <td scope="row">
-                                <textarea style="background: transparent;" name="" id="" cols="30"><?php echo $mess['Content'] ?></textarea>
+                                <textarea readonly style="background: transparent;" name="" id="" cols="30"><?php echo $mess['Content'] ?></textarea>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -114,7 +114,7 @@
                             <td scope="row"><?php echo $comment['Con_Name'] ?></td>
                             <td scope="row"><?php echo $comment['Coor_FullName'] ?></td>
                             <td scope="row">
-                                <textarea style="background: transparent;" name="" id="" cols="30"><?php echo $comment['Com_Detail'] ?></textarea>
+                                <textarea readonly style="background: transparent;" name="" id="" cols="30"><?php echo $comment['Com_Detail'] ?></textarea>
                             </td>
                         </tr>
                         <?php endforeach; ?>

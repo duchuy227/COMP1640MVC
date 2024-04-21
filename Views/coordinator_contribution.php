@@ -42,7 +42,7 @@
                             <tr class="table bordered" style=" background-color: #d7ede2; text-align:center">
                                     <td scope="row"><?php echo $contribution['Con_Name'] ?></td>
                                     <td scope="row">
-                                        <textarea style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
+                                        <textarea readonly style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
                                     </td>
                                     <td scope="row"><?php echo $contribution['Stu_FullName'] ?></td>
                                     <td scope="row"><?php echo $contribution['Con_Status'] ?></td>
