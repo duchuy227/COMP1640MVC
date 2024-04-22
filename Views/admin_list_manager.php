@@ -131,7 +131,7 @@
                             <?php  
                                 echo '<img width="100"  src="data:image/*;base64,' . base64_encode($admin['Image']) . '" />';
 
-                    ?>  
+                            ?>  
 
                             </td>
                             <td>

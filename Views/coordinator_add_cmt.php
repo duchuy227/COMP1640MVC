@@ -21,11 +21,16 @@
             <div class="head-title">
                 <div class="left">
                     <h3 style="color: #FF6347;">Comment</h3>
+                    
                 </div>
             </div>
             <div class="table-data">
                 <div class="order">
                     <h4 style="color: #009879; text-align:center; text-transform:uppercase; margin-bottom: 20px">Comment Contribution</h4>
+                    <?php foreach ($comments as $comment): ?>
+                        <label for="Com_ID">Previous Comment</label>
+                        <textarea readonly class="form-control"  name="" id="Com_ID" cols="30" rows=""><?php echo $comment['Com_Detail']; ?></textarea>
+                    <?php endforeach ?>
                     <form method="post">
                         <div class="form-group">
                             <label for="Con_Name">Name</label>
@@ -45,7 +50,7 @@
 
                         <div class="form-group">
                             <label for="Com_ID">Comment</label>
-                            <textarea class="form-control" type="text" name="Com_Detail" id="Com_ID" cols="30" rows="10"  required></textarea>
+                            <textarea class="form-control" type="text" name="Com_Detail" id="Com_ID" cols="30" rows="10"   required></textarea>
                             <script src="./ckeditor/ckeditor.js"></script>
                             <script>
                                 CKEDITOR.replace("Com_Detail");                              

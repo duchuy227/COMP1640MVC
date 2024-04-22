@@ -117,25 +117,25 @@
 
         public function getContributionDetail($con_id) {
             $query = "SELECT Contribution.*, Topic.Topic_Name, 
-                    CASE WHEN Contribution.Con_Status = 'Approval' THEN Comments.Com_Detail
-                    ELSE ''
-                    END AS Com_Detail
-                    FROM Contribution
-                    LEFT JOIN Topic ON Contribution.Topic_ID = Topic.Topic_ID
-                    LEFT JOIN Comments ON Contribution.Con_ID = Comments.Con_ID
-                    WHERE Contribution.Con_ID = :con_id";
+            CASE WHEN Contribution.Con_Status IN ('Approval', 'Rejected') THEN Comments.Com_Detail
+            ELSE ''
+            END AS Com_Detail
+            FROM Contribution
+            LEFT JOIN Topic ON Contribution.Topic_ID = Topic.Topic_ID
+            LEFT JOIN Comments ON Contribution.Con_ID = Comments.Con_ID
+            WHERE Contribution.Con_ID = :con_id";
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':con_id' => $con_id));
             return $sql->fetch(PDO::FETCH_ASSOC);
         }
 
 
-        public function updateContributionStatus($con_id, $status) {
-            $query = "UPDATE Contribution SET Con_Status = :status WHERE Con_ID = :con_id";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':status', $status);
-            $stmt->bindParam(':con_id', $con_id);
-            return $stmt->execute();
+        public function updateContributionStatus($id, $status) {
+            // Cập nhật trạng thái của contribution
+            $query = "UPDATE contribution SET Con_Status = :status WHERE Con_ID = :id";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':id' => $id, ':status' => $status));
+            return $sql->rowCount() > 0;
         }
 
         public function updateStudentAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id,$imageData)
@@ -152,20 +152,71 @@
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':com_detail' => $Com_Detail, ':con_id' => $Con_ID, ':coor_id' => $Coor_ID));  
         }
-        public function changeStatus($Con_ID){
-            $query = 'UPDATE contribution set Con_Status = "Approval" where Con_ID =:con_id';
+
+        public function addContributionToMagazine($contribution) {
+            // Lấy thông tin cần thêm vào bảng Magazine từ contribution
+            $magaStatus = 'posted';
+            $magaCreateTime = $contribution['Con_SubmissionTime'];
+            $conID = $contribution['Con_ID'];
+        
+            // Thực hiện câu truy vấn để thêm vào bảng Magazine
+            $query = "INSERT INTO Magazine (Maga_Status, Maga_CreateTime, Con_ID) 
+                      VALUES (:magaStatus, :magaCreateTime, :conID)";
             $sql = $this->conn->prepare($query);
-            $sql->execute(array(':con_id' => $Con_ID)) ;
-            $sql->fetch(PDO::FETCH_ASSOC);
-            $contri = $this->getContributionByID($Con_ID);
-            $this->addToMagazine("Posted", $contri['Con_SubmissionTime'],$Con_ID);
+            $sql->execute(array(':magaStatus' => $magaStatus, ':magaCreateTime' => $magaCreateTime, ':conID' => $conID));
         }
 
-        public function addToMagazine($status,$time,$Con_ID){
-            $query = "INSERT INTO magazine (Maga_Status,Maga_CreateTime,Con_ID) 
-            VALUES (:status,:time,:con_id)";
+        public function getContributionWithComments($conID) {
+            $query = "SELECT contribution.*, comments.Com_Detail, comments.Coor_ID 
+                      FROM contribution 
+                      LEFT JOIN comments ON contribution.Con_ID = comments.Con_ID 
+                      WHERE contribution.Con_ID = :conID";
             $sql = $this->conn->prepare($query);
-            $sql->execute(array(':status'=>$status,':time'=>$time,':con_id' => $Con_ID)) ;
+            $sql->execute(array(':conID' => $conID));
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        public function getCommentsForContribution($conID) {
+            // Chuẩn bị câu truy vấn
+            $query = "SELECT * FROM comments WHERE Con_ID = :Con_ID";
+            $statement = $this->conn->prepare($query);
+            
+            // Bind giá trị cho tham số Con_ID
+            $statement->bindParam(':Con_ID', $conID);
+            
+            // Thực thi truy vấn
+            $statement->execute();
+            
+            // Lấy kết quả
+            $comments = $statement->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $comments;
+        }
+
+        public function getCommentsForContributionByCoordinator($conID, $coorID) {
+            // Chuẩn bị truy vấn SQL để lấy các comment của contribution dựa trên Con_ID và Coor_ID
+            $query = "SELECT * FROM comments WHERE Con_ID = :Con_ID AND Coor_ID = :Coor_ID";
+            
+            // Chuẩn bị và thực thi truy vấn
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':Con_ID' => $conID, ':Coor_ID' => $coorID));
+            
+            // Lấy tất cả các comment và trả về kết quả
+            $comments = $sql->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $comments;
+        }
+
+        public function updateComment($commentID, $newComment) {
+            // Chuẩn bị truy vấn SQL để cập nhật comment dựa trên ID của comment
+            $query = "UPDATE comments SET Com_Detail = :newComment WHERE Com_ID = :commentID";
+            
+            // Chuẩn bị và thực thi truy vấn
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':newComment' => $newComment, ':commentID' => $commentID));
+            
+            // Trả về true nếu cập nhật thành công, ngược lại trả về false
+            return $sql->rowCount() > 0 ? true : false;
         }
         
         public function checkDate($Con_ID){
@@ -207,6 +258,8 @@
             $sql->execute() ;
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
+
+        
 
     }
 ?>

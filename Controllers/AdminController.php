@@ -340,53 +340,70 @@ class AdminController {
     }
 
     public function delete_student($id) {
-        // Xử lý xóa Manager
         $adminModel = new AdminModel();
-        $adminModel->deleteStudentAccount($id);
+        if ($adminModel->checkContriForStudent($id)) {
+            // Nếu có, thông báo cho người dùng và không thực hiện việc xóa
+            echo "<p style='font-size: 20px'>Cannot delete this student. There are contribution associated with this student</p>.<br> <button style='margin-top: 0px; background-color: green; border-radius: 20px; padding: 15px 10px'><a style='text-decoration: none; color: white;' href='index.php?action=student'>List Student</a></button>";
 
-        // Chuyển hướng sau khi xóa thành công
-        header('Location: index.php?action=student');
-        exit();
+        } else {
+            // Nếu không có, thực hiện việc xóa người phối hợp
+            $adminModel->deleteStudentAccount($id);
+
+            // Chuyển hướng sau khi xóa thành công
+            header('Location: index.php?action=student');
+            exit();
+        }
     }
 
     public function insert_coordinator() {
         ob_start();
-        if($this->is_login == true && $_SESSION['role_id'] == 1) {
+        if ($this->is_login == true && $_SESSION['role_id'] == 1) {
             $adminModel = new adminModel();
             $faculty = $adminModel->getAllFaculty();
             $insert = true;
-            
-                    // Xử lý thêm mới Manager
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                        if(isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["tmp_name"])){
-                           
-                            $imageData = file_get_contents($_FILES["avatar"]["tmp_name"]);
-                            }  else{
-                                $imageData=null;
-                            }
-                        $username = $_POST['username'];
-                        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                        $email = $_POST['email'];
-                        $fullname = $_POST['fullname'];
-                        $dob = $_POST['dob'];
-                        $role_Id = $_POST['role_id'];
-                        $fa_id = $_POST['fa_id'];
-                      
-                        $err = $adminModel->validateCoordinator('',$username, $password, $email, $dob, $role_Id, $fullname, $imageData, $fa_id, $insert);
+            $err = [];
+    
+            // Xử lý thêm mới Coordinator
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if (isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["tmp_name"])) {
+                    $imageData = file_get_contents($_FILES["avatar"]["tmp_name"]);
+                } else {
+                    $imageData = null;
+                }
+                $username = $_POST['username'];
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                $email = $_POST['email'];
+                $fullname = $_POST['fullname'];
+                $dob = $_POST['dob'];
+                $role_Id = $_POST['role_id'];
+                $fa_id = $_POST['fa_id'];
+    
+                // Kiểm tra xem faculty đã có coordinator hay chưa
+                $hasCoordinator = $adminModel->checkFacultyHasCoordinator($fa_id);
+    
+                if ($hasCoordinator) {
+                    // Hiển thị thông báo lỗi trong view
+                    // Ví dụ: include 'views/error_faculty_has_coordinator.php';
+                    $err['faculty_has_coordinator'] = "Faculty này đã có coordinator.";
+                } else {
+                    $err = $adminModel->validateCoordinator("",$username, $password, $email, $dob, $role_Id, $fullname, $imageData, $insert);
 
-                        if(empty($err)){
-                        $adminModel->addCoordinatorAccount($username, $password, $email, $fullname, $dob, $role_Id, $fa_id,$imageData);
+                    // Thêm coordinator mới vào database
+                    if(empty($err)){
+                        $adminModel->addCoordinatorAccount($username, $password, $email, $fullname, $dob, $role_Id, $fa_id, $imageData);
                         header('Location: index.php?action=coordinator');
                         exit();
-                        }
-
-                    }include 'views/admin_add_coordinator.php'; 
-            } 
-            else {
-                header("Location: views/university_index.php");
-                     }
+                    }
+                }
+            }
+    
+            include 'views/admin_add_coordinator.php';
+        } else {
+            header("Location: views/university_index.php");
+        }
         ob_end_flush();
     }
+    
 
     
 
@@ -434,13 +451,21 @@ class AdminController {
     }
 
     public function delete_coordinator($id) {
-        // Xử lý xóa Manager
         $adminModel = new AdminModel();
-        $adminModel->deleteCoordinatorAccount($id);
+        
+        // Kiểm tra xem có bình luận nào liên kết với người phối hợp hay không
+        if ($adminModel->checkCommentsForCoordinator($id)) {
+            // Nếu có, thông báo cho người dùng và không thực hiện việc xóa
+            echo "<p style='font-size: 20px'>Cannot delete this coordinator. There are comments associated with this coordinator</p>.<br> <button style='margin-top: 0px; background-color: green; border-radius: 20px; padding: 15px 10px'><a style='text-decoration: none; color: white;' href='index.php?action=coordinator'>List Coordinator</a></button>";
 
-        // Chuyển hướng sau khi xóa thành công
-        header('Location: index.php?action=coordinator');
-        exit();
+        } else {
+            // Nếu không có, thực hiện việc xóa người phối hợp
+            $adminModel->deleteCoordinatorAccount($id);
+
+            // Chuyển hướng sau khi xóa thành công
+            header('Location: index.php?action=coordinator');
+            exit();
+        }
     }
 
     public function admin_statistics(){
@@ -458,7 +483,21 @@ class AdminController {
     public function admin_topic(){
         if($this->is_login == true && $_SESSION['role_id'] == 1) {
             $adminModel = new AdminModel();
-            $topic = $adminModel -> getAllTopic();
+            $faculty = $adminModel ->getAllFaculty();
+
+            if(isset($_POST['name'])) {
+                $name = $_POST['name'];
+                $topic = $adminModel->getTopictByName($name);
+            }
+            // Kiểm tra xem fa_id có được thiết lập trong dữ liệu POST không
+            else if(isset($_POST['fa_id'])) {
+                $fa_id = $_POST['fa_id'];
+                $topic = $adminModel->getTopicByFaculty($fa_id);
+            }
+            // Nếu không có username hoặc fa_id được thiết lập, lấy tất cả tài khoản người phụ trách
+            else {
+                $topic = $adminModel->getAllTopic();
+            }
 
             include 'views/admin_topic.php';
         }
@@ -636,8 +675,25 @@ class AdminController {
     public function magazine(){
         $adminModel = new AdminModel();
         $maga = $adminModel ->getAllMagazine();
+        
 
         include 'views/magazine.php';
+    }
+
+    public function magazine_faculty($id){
+        $adminModel = new AdminModel();
+        $maga = $adminModel ->getMagazinesByFaculty($id);
+
+        include 'views/magazine.php';
+    }
+
+    public function magazine_topic($id){
+        $adminModel = new AdminModel();
+        $university = $adminModel ->getMagazinesByTopic($id);
+
+
+
+        include 'views/magazine_topic.php';
     }
 
     public function magazine_detail($id){

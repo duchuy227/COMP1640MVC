@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Contribution</title>
 </head>
 <body>
     <?php include 'Layout/coor_sidebar.php' ?>
@@ -48,25 +48,24 @@
                                     <td scope="row"><?php echo $contribution['Con_Status'] ?></td>
                                     
                                     <td >
+                                    <?php if ($contribution['Con_Status'] != 'Approval' && $contribution['Con_Status'] != 'Rejected'): ?>
                                         <button class="btn btn-success">
                                             <a style="text-decoration: none; color:#fff"  
-                                            href="index.php?action=coordinator_update_contribution&id=<?php echo $contribution['Con_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
+                                            href="index.php?action=change_status&id=<?php echo $contribution['Con_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
                                         </button>
+                                    <?php endif; ?>
 
                                         <button class="btn btn-primary">
                                             <a style="text-decoration: none; color:#fff"
                                             href="index.php?action=coordinator_contribution_detail&id=<?php echo $contribution['Con_ID'] ?>"><i class="bi bi-files"></i></a>
                                         </button>
 
-                                        <!-- <button class="btn btn-danger">
-                                            <a style="text-decoration: none; color:#fff" 
-                                            href="index.php?action=delete_contribution&id=<?php echo $contribution['Con_ID']; ?>" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
-                                        </button> -->
-
+                                        <?php if ($contribution['Con_Status'] != 'Approval' && $contribution['Con_Status'] != 'Rejected'): ?>
                                         <button class="btn btn-secondary">
                                             <a style="text-decoration: none; color:#fff"  
                                             href="index.php?action=coordinator_add_comment&id=<?php echo $contribution['Con_ID']; ?>"><i class="bi bi-chat-left"></i></a> 
                                         </button>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

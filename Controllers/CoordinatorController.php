@@ -69,15 +69,11 @@
                 
         
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    // Kiểm tra xem các trường bắt buộc đã được gửi từ form hay không
-                    // if(isset($_POST['password']) && isset($_POST['fa_id'])) {
                         $id = $_POST['id'];
                         $username = $_POST['username'];
                         $password = $_POST['password'];
                         $fa_id = $_POST['fa_id'];
-                        
-                        
-                        // Xử lý tải ảnh mới hoặc sử dụng ảnh hiện tại
+
                         if(isset($_FILES["new_avatar"]) && !empty($_FILES["new_avatar"]["tmp_name"])) { 
                             $file = $_FILES["new_avatar"];
                             $imageData = file_get_contents($file["tmp_name"]);          
@@ -86,60 +82,20 @@
                             $imageData = base64_decode($image);                  
                         }
         
-                        // Lấy các giá trị khác từ form
                         $email = $_POST['email'];
                         $fullname = $_POST['fullname'];
                         $dob = $_POST['dob'];
                         $roleId = $_POST['role_id'];
-        
-                        // Thực hiện cập nhật thông tin sinh viên
+
                         $updateCoor = $coordinatorModel->updateCoordinatorProfile($id,$username, $password, $email, $fullname, $dob, $roleId, $fa_id, $imageData);
                         $_SESSION['username'] = $username;
                         header('Location: index.php?action=coordinator_profile');
-                        
-                    // } else {
-                        // echo 'Hi';
-                    // }
                 } else {
                     
                 } include 'views/coordinator_edit_profile.php';
             }
             
         }
-
-        // public function coordinator_edit_student($id){
-        //     if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
-        //         $coordinatorModel = new CoordinatorModel();
-        //         $coorInfo = $coordinatorModel->getCoordinatorbyUserName($_SESSION['username']);
-        //         $faculty = $coordinatorModel->getAllFaculty();
-                
-        //         // Xử lý cập nhật thông tin sinh viên
-        //         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        //             // Xử lý tải ảnh mới hoặc sử dụng ảnh hiện tại
-        //             if (isset($_FILES["new_avatar"]) && !empty($_FILES["new_avatar"]["tmp_name"])) { 
-        //                 $file = $_FILES["new_avatar"];
-        //                 $imageData = file_get_contents($file["tmp_name"]);          
-        //             } else {
-        //                 $image = $_POST["avatar"];
-        //                 $imageData = base64_decode($image);                  
-        //             }
-        //             $username = $_POST['username'];
-        //             $password = $_POST['password'];
-        //             $email = $_POST['email'];
-        //             $fullname = $_POST['fullname'];
-        //             $dob = $_POST['dob'];
-        //             $roleId = $_POST['role_id'];
-        //             $fa_id = $_POST['fa_id'];
-        
-        //             // Thực hiện cập nhật thông tin sinh viên
-        //             $coordinatorModel->updateStudentAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id, $imageData);
-        //             header('Location: index.php?action=coordinator_student');
-        //             exit();
-        //         }
-                
-        //         include 'views/coordinator_edit_student.php';
-        //     } 
-        // }
 
         public function coordinator_contribution(){
             if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
@@ -156,23 +112,33 @@
             }
         }
 
-        public function coor_update_contribution($id){
+        public function change_status($id){
             if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
                 $coordinatorModel = new CoordinatorModel();
                 $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
-
+        
                 $contribution = $coordinatorModel ->getContributionByID($id);
-
+        
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $status = $_POST['status'];
-                    $success = $coordinatorModel ->updateContributionStatus($id, $status);
+                    $contributionID = $id; // Lưu lại ID của contribution
+                    $success = $coordinatorModel ->updateContributionStatus($contributionID, $status);
+        
+                    // Kiểm tra nếu trạng thái mới là "Approval", thêm vào bảng Magazine
+                    if ($status === 'Approval') {
+                        // Lấy thông tin contribution đã được cập nhật
+                        $updatedContribution = $coordinatorModel->getContributionByID($contributionID);
+                        // Thêm vào bảng Magazine
+                        $coordinatorModel->addContributionToMagazine($updatedContribution);
+                    }
+        
                     header('Location: index.php?action=coordinator_contribution');
                 }
-
+        
                 include 'views/coordinator_update_contribution.php';
-
             }
         }
+        
 
         public function coor_contribution_detail($id){
             if ($this->is_login == true && $_SESSION['role_id'] == 4 ) {
@@ -229,6 +195,7 @@
                 $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
         
                 $contribution = $coordinatorModel->getContributionById($id);
+                $comments = $coordinatorModel->getCommentsForContribution($id); // Lấy tất cả các comment liên quan đến contribution
                 // Xử lý khi form được submit
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Lấy dữ liệu từ form
@@ -241,7 +208,6 @@
                     if($check == true) {
 
                         $this->model->addComment($Com_Detail, $Con_ID, $Coor_ID);
-                        $this->model->changeStatus($Con_ID);
 
                         $time = time();
                         $currentTime = $time - (7 * 3600);
@@ -258,10 +224,15 @@
             ob_end_flush();
         }
 
+        public function viewContributionWithComments($conID) {
+            $coordinatorModel = new CoordinatorModel();
+            $contributions = $coordinatorModel->getContributionWithComments($conID);
+            include 'views/coordinator_add_cmt.php';
+        }
+
         public function mailToAdmin($CommentTime, $coorname, $Con_ID){
             $mail = new PHPMailer(true);
             try {
-                // Server settings
                 $mail->SMTPDebug = 0;
                 $mail->isSMTP(); // Send using SMTP
                 $mail->Host       = 'smtp.gmail.com'; // Set the SMTP server to send through
@@ -466,7 +437,6 @@
                     </html>
                 ';   
                 $mail->send();
-                // echo 'Message has been sent';
             } catch (Exception $e) {
         
             }
@@ -548,37 +518,5 @@
         
             }
         }
-        
-        
-        
     }  
-
-    // public function download() {  
-    //     $zip = new ZipArchive();
-    //     $download = $this->model->download();
-    //     $zipName = 'contributions.zip';
-    //     $zip->open($zipName, ZipArchive::CREATE) ;
-      
-    //     foreach($download as $row) {
-            
-    //         $fileName = 'contribution_' . $row['Con_Name'] . '.doc';
-         
-    //         $fileContent = $row['con_doc'];
-            
-    //         $zip->addFromString($fileName, $fileContent);
-    //     }
-        
-        
-    //     $zip->close();
-        
-    //     header("Content-type: application/zip");
-       
-    //     header("Content-Disposition: attachment; filename=$zipName");
-    //     //
-    //     readfile($zipName);
-    //     // 
-    //     unlink($zipName);
-    
-    // }
-    
 ?>

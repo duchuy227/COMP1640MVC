@@ -39,6 +39,7 @@
                             <label for="status">Status:</label>
                             <select class="form-control" name="status" id="status">
                                 <option value="Pending" <?php if ($contribution['Con_Status'] == 'Pending') echo 'selected'; ?>>Pending</option>
+                                <option value="Approval" <?php if ($contribution['Con_Status'] == 'Approval') echo 'selected'; ?>>Approval</option>
                                 <option value="Rejected" <?php if ($contribution['Con_Status'] == 'Rejected') echo 'selected'; ?>>Rejected</option>
                             </select>
                         </div>

@@ -169,7 +169,17 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        public function deleteContribution($con_id){
+            // Xoá comment của contribution đó từ bảng Comments
+            $queryDeleteComment = "DELETE FROM Comments WHERE Con_ID = :con_id";
+            $sqlDeleteComment = $this->conn->prepare($queryDeleteComment);
+            $sqlDeleteComment->execute(array(':con_id' => $con_id));
         
+            // Xoá contribution từ bảng Contribution
+            $queryDeleteContribution = "DELETE FROM Contribution WHERE Con_ID = :con_id";
+            $sqlDeleteContribution = $this->conn->prepare($queryDeleteContribution);
+            $sqlDeleteContribution->execute(array(':con_id' => $con_id));
+        }
 
 
     }

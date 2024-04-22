@@ -334,7 +334,14 @@ class AdminModel
         } 
     
         return $errors;
-    } 
+    }
+    
+    public function decrypt_password($hashed_password) {
+        // Hàm md5 không thể được giải mã ngược lại, nhưng chúng ta có thể sử dụng một số phương pháp tương đối để giải mã đơn giản như tạo ra một từ điển các giá trị đã biết.
+        // Tuy nhiên, đây không phải là một phương pháp an toàn và không nên được sử dụng trong môi trường thực tế.
+        // Trong ví dụ này, chúng ta đơn giản trả về mật khẩu đã mã hóa MD5 để hiển thị dưới dạng văn bản thô.
+        return md5($hashed_password);
+    }
 
     // End Validate // 
 
@@ -437,6 +444,14 @@ class AdminModel
         $sql->execute(array(':username' => $username, ':password' => $password, ':email' => $email, ':fullname' => $fullname, ':dob' => $dob, ':role_id' => $roleId, ':fa_id' => $fa_id, ':imageData'=>$imageData));
     }
 
+    public function checkFacultyHasCoordinator($faculty_id) {
+        $query = "SELECT COUNT(*) FROM coordinator WHERE Fa_ID = :faculty_id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':faculty_id' => $faculty_id));
+        $result = $sql->fetchColumn();
+        return $result > 0; // Trả về true nếu faculty đã có coordinator, ngược lại trả về false
+    }
+
     public function updateCoordinatorAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id,$imageData)
     {
         $query = "UPDATE Coordinator SET Coor_Username = :username, Coor_Password = :password, Coor_Email = :email, Coor_FullName = :fullname, Coor_DOB = :dob, Role_ID = :role_id, Fa_ID = :fa_id ,Image =:imageData WHERE Coor_ID = :id";
@@ -444,12 +459,35 @@ class AdminModel
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':username' => $username, ':password' => $password, ':email' => $email, ':fullname' => $fullname, ':dob' => $dob, ':role_id' => $roleId, ':fa_id' => $fa_id, ':id' => $id,':imageData'=>$imageData));
     }
+
     public function deleteCoordinatorAccount($id)
     {
         $query = "DELETE FROM Coordinator WHERE Coor_ID = :id";
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':id' => $id));
     }
+
+    public function checkCommentsForCoordinator($id) {
+        $query = "SELECT COUNT(*) FROM comments WHERE Coor_ID = :id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':id' => $id));
+        $result = $sql->fetch(PDO::FETCH_ASSOC);
+    
+        // Nếu có bất kỳ bình luận nào liên kết với người phối hợp, trả về true
+        return ($result['COUNT(*)'] > 0);
+    }
+
+    public function checkContriForStudent($id) {
+        $query = "SELECT COUNT(*) FROM contribution WHERE Stu_ID = :id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':id' => $id));
+        $result = $sql->fetch(PDO::FETCH_ASSOC);
+    
+        // Nếu có bất kỳ bình luận nào liên kết với người phối hợp, trả về true
+        return ($result['COUNT(*)'] > 0);
+    }
+
+
     public function getStudentAccountByFaculty($fa_id)
     {
         $query = 'SELECT student.* ,faculty.Fa_Name from student INNER Join Faculty ON Student.Fa_ID = Faculty.Fa_ID where student.Fa_ID= :fa_id;';
@@ -538,6 +576,22 @@ class AdminModel
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getTopicByFaculty($fa_id)
+    {
+        $query = 'SELECT topic.* ,faculty.Fa_Name from topic INNER Join Faculty ON topic.Fa_ID = Faculty.Fa_ID where topic.Fa_ID= :fa_id;';
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':fa_id'=> $fa_id));
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTopictByName($username)
+    {
+        $query = 'SELECT topic.* ,faculty.Fa_Name from topic INNER Join Faculty ON topic.Fa_ID = Faculty.Fa_ID where topic.Topic_Name Like :username;';
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':username' => '%' . $username . '%'));
+        return $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getTopicById($id)
         {
             $query = "SELECT * FROM Topic Join Faculty ON Topic.Fa_ID = Faculty.Fa_ID where Topic_ID = :id";
@@ -595,6 +649,25 @@ class AdminModel
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':maga_id'=> $maga_id));
         return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getMagazinesByFaculty($faculty_id) {
+        $query = "SELECT * FROM magazine
+                  INNER JOIN contribution ON magazine.Con_ID = contribution.Con_ID
+                  INNER JOIN student ON contribution.Stu_ID = student.Stu_ID
+                  WHERE student.Fa_ID = :faculty_id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':faculty_id' => $faculty_id));
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMagazinesByTopic($topic_id) {
+        $query = "SELECT * FROM magazine
+                  INNER JOIN contribution ON magazine.Con_ID = contribution.Con_ID
+                  WHERE contribution.Topic_ID = :topic_id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':topic_id' => $topic_id));
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getAllMessage(){

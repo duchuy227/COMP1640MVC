@@ -21,8 +21,8 @@
 			<li>
 				<a style="text-decoration: none;" href="#"><i class='bx bxs-notepad icon' ></i> Contribution <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown">
-					<li><a style="text-decoration: none;" href="index.php?action=manager_view_contribution&id=1">List Contribution</a></li>
-					<li><a style="text-decoration: none;" href="index.php?action=manager_view_contribution&id=2">Select Contribution</a></li>
+					<li><a style="text-decoration: none;" href="index.php?action=manager_view_contribution">List Contribution</a></li>
+					<li><a style="text-decoration: none;" href="index.php?action=manager_select_contribution">Select Contribution</a></li>
 				</ul>
 			</li>
 			<li><a style="text-decoration: none;" href="index.php?action=manager_profile"><i class='bx bxs-user-circle icon' ></i> Profile</a></li>

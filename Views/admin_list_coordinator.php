@@ -171,51 +171,54 @@
         </div>
 
         <table class="table table-bordered border-bold">
-        <thead class="thread-dark">
-            <tr class="table-primary table-bordered border-info-bold">
-                <!-- <th>ID</th> -->
-                <th>Name</th>
-                <th>Email</th>
-                <th>Fullname</th>
-                <th>DOB</th>
-                <th>Faculty</th>
-                <th>Image</th>
-                <th style="text-align: center;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($admin as $admin): ?>
-                <tr class="table-secondary">
-                    <!-- <td><?php echo $admin['Coor_ID']; ?></td> -->
-                    <td><?php echo $admin['Coor_Username']; ?></td>
-                    <td><?php echo $admin['Coor_Email']; ?></td>
-                    <td><?php echo $admin['Coor_FullName']; ?></td>
-                    <td><?php echo $admin['Coor_DOB']; ?></td>
-                    <td><?php echo $admin['Fa_Name']; ?></td>
-                    <td>
-                    <?php  
-                       if($admin['Image'] != null)
-                        echo '<img width="100"  src="data:image/*;base64,' . base64_encode($admin['Image']) . '" />';
-                       ?>   
-                
-                    </td>
-                    <td>
-                    <button class="btn btn-success">
-                        <a style="text-decoration: none; color:#fff" 
-                        href="index.php?action=update_coordinator&id=<?php echo $admin['Coor_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
-                    </button>
-
-                    <button class="btn btn-danger">
-                        <a style="text-decoration: none; color:#fff"  
-                        href="index.php?action=delete_coordinator&id=<?php echo $admin['Coor_ID']; ?>" onclick="return confirm('Do you want to delete this account')"><i class="bi bi-trash"></i></a>
-                    </button>
-                    </td>
+            <thead class="thread-dark">
+                <tr class="table-primary table-bordered border-info-bold">
+                    <!-- <th>ID</th> -->
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Fullname</th>
+                    <th>DOB</th>
+                    <th>Faculty</th>
+                    <th>Image</th>
+                    <th style="text-align: center;">Action</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
+            </thead>
+            <tbody>
+                <?php foreach ($admin as $admin): ?>
+                    <tr class="table-secondary">
+                        <!-- <td><?php echo $admin['Coor_ID']; ?></td> -->
+                        <td><?php echo $admin['Coor_Username']; ?></td>
+                        <td><?php echo $admin['Coor_Email']; ?></td>
+                        <td><?php echo $admin['Coor_FullName']; ?></td>
+                        <td><?php echo $admin['Coor_DOB']; ?></td>
+                        <td><?php echo $admin['Fa_Name']; ?></td>
+                        <td>
+                        <?php  
+                        if($admin['Image'] != null)
+                            echo '<img width="100"  src="data:image/*;base64,' . base64_encode($admin['Image']) . '" />';
+                        ?>   
+                    
+                        </td>
+                        <td>
+                        <button class="btn btn-success">
+                            <a style="text-decoration: none; color:#fff" 
+                            href="index.php?action=update_coordinator&id=<?php echo $admin['Coor_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
+                        </button>
+
+                        <button class="btn btn-danger">
+                            <a style="text-decoration: none; color:#fff"  
+                            href="index.php?action=delete_coordinator&id=<?php echo $admin['Coor_ID']; ?>" onclick="return confirm('Do you want to delete this account')"><i class="bi bi-trash"></i></a>
+                        </button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
     </table>
         </div>
     </div>
+    
 
+    
+</script>
 </body>
 </html>

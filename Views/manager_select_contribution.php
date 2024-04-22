@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <title>Contribution</title>
+    <title>Contribution Select</title>
 </head>
     <style>
         .pagination {
@@ -36,7 +36,8 @@
 		<main>
 			<div class="data">
 				<div class="content-data">
-                    <h4 style="color: #009966; text-transform:uppercase; text-align: center">All Contributions</h4>
+                    <h4 style="color: #009966;text-transform:uppercase; text-align: center">
+                    Selected Contribution</h4>
                     <br>
                         <table class="table table-bordered border-bold">
                             <thead class="thead-dark">
@@ -44,9 +45,9 @@
                                     <td scope="col">Name</td>
                                     <td scope="col">Description</td>
                                     <td scope="col">Subbmission Time</td>
+                                    <td scope="col">Image</td>
                                     <td scope="col">Doc</td>
                                     <td scope="col">Status</td>
-                                    <td scope="col">Action</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,6 +58,12 @@
                                     <textarea readonly style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
                                 </td>
                                 <td scope="row"><?php echo $contribution['Con_SubmissionTime'] ?></td>
+
+                                <td>
+                                <?php  
+                                    echo '<img width="100"  src="data:image/*;base64,' . base64_encode($contribution['Con_Image']) . '" />';
+                                ?> 
+                                </td>
                                 
                                 <td scope="row">
                                     <?php if ($contribution['Con_Status']=='Approval'):?>
@@ -67,15 +74,6 @@
                                 </td>
                                 <td scope="row"><?php echo $contribution['Con_Status'] ?></td>
 
-                                <td>
-                                    <?php if ($contribution['Con_Status']=='Rejected'):?>
-                                    <button class="btn btn-danger">
-                                        <a style="text-decoration: none; color:#fff" 
-                                        href="index.php?action=manager_delete_contribution&id=<?php echo $contribution['Con_ID'] ?>" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
-                                    </button>
-                                    <?php endif;?>
-
-                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>

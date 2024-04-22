@@ -190,20 +190,21 @@
             }
         }
 
-        public function manager_view_contribution($id){
+        public function manager_view_contribution(){
             if ($this->is_login == true && $_SESSION['role_id'] == 3 ) {
                 $managerModel = new ManagerModel();
                 $ManagerProfile = $managerModel->getManagerByUsername($_SESSION['username']);
-                if($id ==1)
-                {
-                    $contribution = $managerModel->getAllContribution() ;
-                    include 'views/manager_view_contribution.php';
-                }
-                else if($id == 2)
-                {
-                    $contribution = $managerModel->getContributionSelected() ;
-                    include 'views/manager_view_contribution.php';
-                }
+                $contribution = $managerModel->getAllContribution() ;
+                include 'views/manager_view_contribution.php';
+            }
+        }
+
+        public function manager_select_contribution(){
+            if ($this->is_login == true && $_SESSION['role_id'] == 3 ) {
+                $managerModel = new ManagerModel();
+                $ManagerProfile = $managerModel->getManagerByUsername($_SESSION['username']);
+                $contribution = $managerModel->getContributionSelected() ;
+                include 'views/manager_select_contribution.php';
             }
         }
 
@@ -246,6 +247,17 @@
                 $sdata = $managerModel->getStudentCountByFaculty();
                 include 'views/manager_statistics.php';
             }
+        }
+
+        public function manager_delete_contribution($id){
+            $user = new UserController();
+            $is_login = $user->is_login();
+            if ($is_login == true && $_SESSION['role_id'] == 3 ) {
+                $managerModel = new ManagerModel();
+                $managerModel->deleteContribution($id);
+                header('Location: index.php?action=manager_view_contribution');
+                exit();
+        }
         }
     }
 

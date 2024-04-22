@@ -320,16 +320,16 @@ include 'PHPMailer/src/SMTP.php';
         }
     }
 
-    public function student_delete_contribution($id){
-        $user = new UserController();
-        $is_login = $user->is_login();
-        if ($is_login == true && $_SESSION['role_id'] == 2 ) {
-            $studentModel = new StudentModel();
-            $studentModel->deleteContribution($id);
-            header('Location: index.php?action=student_contribution');
-            exit();
-        }
-    }
+    // public function student_delete_contribution($id){
+    //     $user = new UserController();
+    //     $is_login = $user->is_login();
+    //     if ($is_login == true && $_SESSION['role_id'] == 2 ) {
+    //         $studentModel = new StudentModel();
+    //         $studentModel->deleteContribution($id);
+    //         header('Location: index.php?action=student_contribution');
+    //         exit();
+    //     }
+    // }
 
     public function student_contribution_detail($id){
         $user = new UserController();

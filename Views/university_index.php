@@ -247,7 +247,7 @@
                     echo '<img  src="data:image/*;base64,' . base64_encode($university['Topic_Image']) . '" />';
                 ?>
                 <div class="details">
-                    <h6><?php echo $university['Topic_Name'] ?></h6>
+                    <h6><a style="text-decoration: none; color:#2c2c2c" href="index.php?action=magazine_topic&id=<?php echo $university['Topic_ID']; ?>"><?php echo $university['Topic_Name'] ?></a></h6>
                     <span>Faculty: <?php echo $university['Fa_Name'] ?></span>
                     <div class="star">
                         <i class="fas fa-star"></i>

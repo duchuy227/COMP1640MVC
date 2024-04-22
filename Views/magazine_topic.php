@@ -304,12 +304,12 @@
 <body>
     <?php include 'Layout/uni_nav.php'?>
     <section id="about-home">
-        <h2>All Magazine</h2>
+        <h2>Magazine by topic</h2>
     </section>
 
     <section id="blog-container">
         <div class="blogs">
-            <?php foreach($maga as $maga): ?>
+            <?php foreach($university as $maga): ?>
             <div class="post">
                 <?php  
                     echo '<img src="data:image/*;base64,' . base64_encode($maga['Con_Image']) . '" />';
@@ -319,19 +319,6 @@
                 <a href="index.php?action=magazine_detail&id=<?php echo $maga['Maga_ID']; ?>">Read More</a>
             </div>
             <?php endforeach; ?>
-        </div>
-
-        <div class="cate">
-            <h2>Faculty</h2>
-            <hr>
-            <a href="index.php?action=magazine_faculty&id=1">IT</a>
-            <hr>
-            <a href="index.php?action=magazine_faculty&id=2">Business</a>
-            <hr>
-            <a href="index.php?action=magazine_faculty&id=3">Design</a>
-            <hr>
-            <a href="index.php?action=magazine_faculty&id=4">Marketing</a>
-            <hr>
         </div>
     </section>
 

@@ -77,6 +77,95 @@
         .pagination button:hover {
             background-color: #e0e0e0;
         }
+
+        .select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            outline: none;
+            box-shadow: none;
+            border: 0!important;
+            background-image: none;
+            position: relative;
+            display: flex;
+            width: 15em;
+            height: 2.5em;
+            line-height: 2.5;
+            background: #5c6664;
+            overflow: hidden;
+            border-radius: .25em;
+            margin-left: 20px;
+        }
+        select ::-ms-expand {
+            display: none;
+        }
+
+        select {
+            flex: 1;
+            padding: 0 .5em;
+            background-color: #5c6664;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .select::after {
+            content: '\25BC';
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0 1em;
+            background: #2b2e2e;
+            cursor: pointer;
+            pointer-events: none;
+            transition: .25s all ease;
+            color: #fff;
+        }
+        .select:hover::after{
+            color: #23b499;
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .sear {   
+            display: flex;
+        }
+        .sear .box {
+            height: 30px;
+            display: flex;
+            cursor: pointer;
+            padding: 20px 10px;
+            background: #778899;
+            border-radius: 30px;
+            align-items: center;
+        }
+
+        .sear .box:hover input {
+            width: 200px;
+        }
+
+        .sear .box input {
+            width: 0;
+            outline: none;
+            border: none;
+            font-weight: 500;
+            transition: 0.8s;
+            background: transparent;
+            color: #fff;
+        }
+
+        .sear .box input::placeholder {
+            color: #fff;
+        }
+
+        .sear .box a i {
+            color: #1daf;
+            font-size: 1.5rem;
+        }
+
 </style>
 <body>
     <?php include 'Layout/admin_sidebar.php'?>
@@ -85,10 +174,46 @@
         <div class="tabular--wrapper">
             <h2>All Topics</h2>
             <div style="margin-bottom: 20px" class="row">
-                <button style="margin-bottom: 10px" class="btn btn-primary">
-                    <a style="text-decoration: none; color:#fff"
-                    href="index.php?action=admin_add_topic"><i class="bi bi-plus-square"></i> Add Topic</a>
-                </button>
+                <div class="col-md-4">
+                    <button style="margin-bottom: 10px" class="btn btn-primary">
+                        <a style="text-decoration: none; color:#fff"
+                        href="index.php?action=admin_add_topic"><i class="bi bi-plus-square"></i> Add Topic</a>
+                    </button>
+                </div>
+
+                <div class="col-md-5">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="select">
+                                <select name="fa_id" id="fa_id">
+                                    <option selected disabled>Choose Faculty</option>
+                                        <?php 
+                                            foreach($faculty as $f){
+                                                echo " <option  value='".$f['Fa_ID']."'>" .$f['Fa_Name']."</option>";
+                                            }
+                                        ?>
+                                </select>
+                            </div>
+                                    
+                        <button style="margin-left: 20px;" type="submit" class="btn btn-warning">Filter</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-3">
+                    <form method="post">
+                        <div class="sear">
+                            <div class="box">
+                                <input name="name" type="text" placeholder="Search...">
+                                <a href="">
+                                    <i type = "submit" class="bi bi-search-heart"></i>
+                                </a>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+
+
                 <table class="table table-bordered border-bold">
                     <thead class="thead-dark">
                         <tr style="text-align:center; background-color:#7388C1; font-weight:bold" class="table bordered">
@@ -96,6 +221,7 @@
                             <td scope="col">Start Date</td>
                             <td scope="col">Closure Date</td>
                             <td scope="col">Final Date</td>
+                            <td scope="col">Faculty</td>
                             <td scope="col"></td>   
                         </tr>
                     </thead>
@@ -106,6 +232,7 @@
                             <td scope="row"><?php echo $topic['Topic_StartDate'] ?></td>
                             <td scope="row"><?php echo $topic['Topic_ClosureDate'] ?></td>
                             <td scope="row"><?php echo $topic['Topic_FinalDate'] ?></td>
+                            <td scope="row"><?php echo $topic['Fa_Name'] ?></td>
                             <td>
                                 <button class="btn btn-secondary">
                                     <a style="text-decoration: none; color:#fff"

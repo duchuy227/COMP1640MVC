@@ -39,10 +39,22 @@ switch ($action) {
         $adminController->magazine();
         break;
     
+    case 'magazine_faculty':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->magazine_faculty($_GET['id']);
+        break;
+    
     case 'magazine_detail':
         require_once 'Controllers/AdminController.php';
         $adminController = new AdminController();
         $adminController->magazine_detail($_GET['id']);
+        break;
+    
+    case 'magazine_topic':
+        require_once 'Controllers/AdminController.php';
+        $adminController = new AdminController();
+        $adminController->magazine_topic($_GET['id']);
         break;
     
     case 'magazine_content':
@@ -275,11 +287,11 @@ switch ($action) {
             $StudentController -> student_update_contribution($_GET['id']);
             break;
     
-        case 'student_delete_contribution':
-            require_once 'Controllers/StudentController.php';
-            $StudentController = new StudentController();
-            $StudentController -> student_delete_contribution($_GET['id']);
-            break;
+        // case 'student_delete_contribution':
+        //     require_once 'Controllers/StudentController.php';
+        //     $StudentController = new StudentController();
+        //     $StudentController -> student_delete_contribution($_GET['id']);
+        //     break;
         
         case 'student_contribution_detail':
             require_once 'Controllers/StudentController.php';
@@ -344,10 +356,10 @@ switch ($action) {
             $CoordinatorController->coordinator_mail();
             break;
         
-        case 'coordinator_update_contribution':
+        case 'change_status':
             require_once 'Controllers/CoordinatorController.php';
             $CoordinatorController = new CoordinatorController();
-            $CoordinatorController -> coor_update_contribution($_GET['id']);
+            $CoordinatorController -> change_status($_GET['id']);
             break;
         
         case 'coordinator_contribution_detail':
@@ -410,8 +422,18 @@ switch ($action) {
         case 'manager_view_contribution':
             require_once 'Controllers/ManagerController.php';                       
             $ManagerController = new ManagerController();
-            $ManagerController -> manager_view_contribution($_GET['id']);
+            $ManagerController -> manager_view_contribution();
             break;
+        
+        
+        
+        case 'manager_select_contribution':
+            require_once 'Controllers/ManagerController.php';                       
+            $ManagerController = new ManagerController();
+            $ManagerController -> manager_select_contribution();
+            break;
+        
+        
 
         case 'download_zip':
             require_once 'Controllers/ManagerController.php';
@@ -441,6 +463,12 @@ switch ($action) {
             require_once 'Controllers/ManagerController.php';
             $ManagerController = new ManagerController();
             $ManagerController-> manager_topic_detail($_GET['id']);
+            break;
+        
+        case 'manager_delete_contribution':
+            require_once 'Controllers/ManagerController.php';
+            $ManagerController = new ManagerController();
+            $ManagerController-> manager_delete_contribution($_GET['id']);
             break;
             //////// End manager //////////
     default:
