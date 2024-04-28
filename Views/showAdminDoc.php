@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./Image/img.png" type="image/x-icon">
     <title>Show Document</title>
 </head>
 <style>
@@ -108,7 +107,7 @@
             ?>
             </p>
             <div class="button">
-                <button class="btn red-btn"><a style="color: #fff; text-decoration:none" href="index.php?action=admin_magazine_detail&id=<?php echo $maga['Maga_ID'] ?>">Back</a></button>
+                <button class="btn red-btn"><a style="color: #fff; text-decoration:none" href="index.php?action=coordinator_contribution_detail&id=<?php echo $maga['Con_ID'] ?>">Back</a></button>
             </div>
         </div>
     </div>

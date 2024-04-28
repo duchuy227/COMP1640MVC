@@ -632,7 +632,6 @@ class AdminController {
         }
     
         include 'views/showAdminDoc.php';
-        include 'views/magazine_detail.php';
         }
     }
 
@@ -699,8 +698,9 @@ class AdminController {
     public function magazine_detail($id){
         $adminModel = new AdminModel();
         $maga = $adminModel ->getMagazineDetailsById($id);
+        
         $docxFilePath = $maga['Con_Doc'];
-            $image = $maga['Con_Image'];
+        $image = $maga['Con_Image'];
 
             require 'vendor/autoload.php';
         // Tải tệp DOCX

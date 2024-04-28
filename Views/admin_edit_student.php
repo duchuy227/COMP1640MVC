@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" value="<?php echo $admin['Stu_Password'] ?>" required>
+                        <input type="password" class="form-control" id="password" name="password" required>
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fa fa-eye" id="togglePassword"></i>

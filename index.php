@@ -7,7 +7,7 @@ switch ($action) {
     // admin
     case 'index':
         if($_SESSION['is_login']== true && $_SESSION['role_id']== 1){
-            header("Location: admin_index.php");
+            header("Location: index.php?action=admin_index");
             exit;
         }
         else{

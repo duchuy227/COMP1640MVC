@@ -461,24 +461,17 @@ include 'PHPMailer/src/SMTP.php';
         
         $docxFilePath = $contribution['Con_Doc'];
         $image = $contribution['Con_Image'];
-        
-        // Sử dụng PHPWord để tải tệp DOCX
+
         require 'vendor/autoload.php';
-        // Tải tệp DOCX
         $phpWord = IOFactory::load($docxFilePath);
-        // Trích xuất tất cả các hình ảnh từ tệp DOCX
-        // Lấy nội dung của tệp DOCX dưới dạng HTML
         $html = '';
         foreach ($phpWord->getSections() as $section) {
             foreach ($section->getElements() as $element) {
                 if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
-                    // Xử lý phần tử TextRun
                     foreach ($element->getElements() as $textElement) {
                         if ($textElement instanceof \PhpOffice\PhpWord\Element\Text) {
-                            // Xử lý phần tử Text
                             $html .= $textElement->getText();
                         } elseif ($textElement instanceof \PhpOffice\PhpWord\Element\TextBreak) {
-                            // Xử lý phần tử TextBreak
                             $html .= "<br>";
                         }
                     }

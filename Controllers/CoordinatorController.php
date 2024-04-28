@@ -188,37 +188,25 @@
 
         public function add_comment($id) {
             ob_start();
-        
             if(isset($_SESSION['is_login']) && $_SESSION['is_login'] == true && $_SESSION['role_id'] == 4) {
-                // Khởi tạo model
                 $coordinatorModel = new CoordinatorModel();
                 $coorInfo = $coordinatorModel ->getCoordinatorbyUserName($_SESSION['username']);
-        
                 $contribution = $coordinatorModel->getContributionById($id);
-                $comments = $coordinatorModel->getCommentsForContribution($id); // Lấy tất cả các comment liên quan đến contribution
-                // Xử lý khi form được submit
+                $comments = $coordinatorModel->getCommentsForContribution($id); 
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    // Lấy dữ liệu từ form
                     $Com_Detail = strip_tags($_POST['Com_Detail']);
                     $Con_ID = $_POST['Con_ID'];
                     $Coor_ID = $_SESSION['userid'];
-
                     $check = $this->model->checkDate($Con_ID);
-        
                     if($check == true) {
-
                         $this->model->addComment($Com_Detail, $Con_ID, $Coor_ID);
-
                         $time = time();
                         $currentTime = $time - (7 * 3600);
                         $CommentTime = date('Y-m-d H:i:s', $currentTime);
                         $this->mailToAdmin($CommentTime,$coorInfo['Coor_FullName'],$Con_ID);
-
                         header('location: index.php?action=coordinator_contribution');
                         exit;
-                    } else {
-                        
-                    }
+                    } 
                 } include "views/coordinator_add_cmt.php";
             }
             ob_end_flush();
@@ -234,22 +222,16 @@
             $mail = new PHPMailer(true);
             try {
                 $mail->SMTPDebug = 0;
-                $mail->isSMTP(); // Send using SMTP
-                $mail->Host       = 'smtp.gmail.com'; // Set the SMTP server to send through
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com'; 
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'leduchuy22072002@gmail.com';
                 $mail->Password   = 'utkziciechiujjxy';
                 $mail->Port       = 587;
-        
-                // Recipients
                 $mail->setFrom('leduchuy22072002@gmail.com');
-                $mail->addAddress('huyldgbh200353@fpt.edu.vn'); // Thay đổi địa chỉ email tại đây
-        
-                // Content
+                $mail->addAddress('huyldgbh200353@fpt.edu.vn');
                 $mail->isHTML(true);
                 $mail->Subject = 'Comment on Contribution';
-        
-                // Build HTML content
                 $htmlContent = '
                     <!DOCTYPE html>
                     <html lang="en">
@@ -297,10 +279,8 @@
                     </body>
                     </html>
                 ';
-        
                 $mail->Body = $htmlContent;
                 $mail->send();
-                // echo 'Message has been sent';
             } catch (Exception $e) {
         
             }

@@ -17,14 +17,13 @@ class UserModel{
                 $sql->execute(array(":username" => $username));
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
-                    // Kiểm tra mật khẩu
                     if (!empty($result) && password_verify($password, $result['Ad_Password'])) {
-                        return true; // Đăng nhập thành công
+                        return true;
                     } else {
-                        return false; // Mật khẩu không chính xác
+                        return false;
                     }
                 } else {
-                    return false; // Không tìm thấy người dùng
+                    return false;
                 }
                 break;
             case 2:
@@ -33,14 +32,13 @@ class UserModel{
                 $sql->execute(array(":username" => $username));
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
-                    // Kiểm tra mật khẩu
-                    if (!empty($result) && password_verify($password, $result['Stu_Password'])) {
-                        return true; // Đăng nhập thành công
+                    if (!empty($result) && $result['Stu_Password'] === $password) {
+                        return true;
                     } else {
-                        return false; // Mật khẩu không chính xác
+                        return false;
                     }
                 } else {
-                    return false; // Không tìm thấy người dùng
+                    return false;
                 }
                 
 
@@ -68,7 +66,7 @@ class UserModel{
                         return false;
                     }
             default:
-                return false; // role_id không hợp lệ
+                return false;
         }
     }
 

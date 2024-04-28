@@ -154,71 +154,24 @@
         }
 
         public function addContributionToMagazine($contribution) {
-            // Lấy thông tin cần thêm vào bảng Magazine từ contribution
             $magaStatus = 'posted';
             $magaCreateTime = $contribution['Con_SubmissionTime'];
             $conID = $contribution['Con_ID'];
-        
-            // Thực hiện câu truy vấn để thêm vào bảng Magazine
             $query = "INSERT INTO Magazine (Maga_Status, Maga_CreateTime, Con_ID) 
                       VALUES (:magaStatus, :magaCreateTime, :conID)";
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':magaStatus' => $magaStatus, ':magaCreateTime' => $magaCreateTime, ':conID' => $conID));
         }
 
-        public function getContributionWithComments($conID) {
-            $query = "SELECT contribution.*, comments.Com_Detail, comments.Coor_ID 
-                      FROM contribution 
-                      LEFT JOIN comments ON contribution.Con_ID = comments.Con_ID 
-                      WHERE contribution.Con_ID = :conID";
-            $sql = $this->conn->prepare($query);
-            $sql->execute(array(':conID' => $conID));
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
-        }
-
         public function getCommentsForContribution($conID) {
-            // Chuẩn bị câu truy vấn
             $query = "SELECT * FROM comments WHERE Con_ID = :Con_ID";
             $statement = $this->conn->prepare($query);
-            
-            // Bind giá trị cho tham số Con_ID
             $statement->bindParam(':Con_ID', $conID);
-            
-            // Thực thi truy vấn
             $statement->execute();
-            
-            // Lấy kết quả
             $comments = $statement->fetchAll(PDO::FETCH_ASSOC);
-            
             return $comments;
         }
-
-        public function getCommentsForContributionByCoordinator($conID, $coorID) {
-            // Chuẩn bị truy vấn SQL để lấy các comment của contribution dựa trên Con_ID và Coor_ID
-            $query = "SELECT * FROM comments WHERE Con_ID = :Con_ID AND Coor_ID = :Coor_ID";
-            
-            // Chuẩn bị và thực thi truy vấn
-            $sql = $this->conn->prepare($query);
-            $sql->execute(array(':Con_ID' => $conID, ':Coor_ID' => $coorID));
-            
-            // Lấy tất cả các comment và trả về kết quả
-            $comments = $sql->fetchAll(PDO::FETCH_ASSOC);
-            
-            return $comments;
-        }
-
-        public function updateComment($commentID, $newComment) {
-            // Chuẩn bị truy vấn SQL để cập nhật comment dựa trên ID của comment
-            $query = "UPDATE comments SET Com_Detail = :newComment WHERE Com_ID = :commentID";
-            
-            // Chuẩn bị và thực thi truy vấn
-            $sql = $this->conn->prepare($query);
-            $sql->execute(array(':newComment' => $newComment, ':commentID' => $commentID));
-            
-            // Trả về true nếu cập nhật thành công, ngược lại trả về false
-            return $sql->rowCount() > 0 ? true : false;
-        }
-        
+                
         public function checkDate($Con_ID){
             $query = 'SELECT * FROM contribution WHERE Con_ID=:con_id and TIMESTAMPDIFF(DAY, Con_SubmissionTime, NOW()) < 14';
             $sql = $this->conn->prepare($query);
@@ -229,6 +182,16 @@
             } else {
                 return false;
             }
+        }
+
+        public function getContributionWithComments($conID) {
+            $query = "SELECT contribution.*, comments.Com_Detail, comments.Coor_ID 
+                      FROM contribution 
+                      LEFT JOIN comments ON contribution.Con_ID = comments.Con_ID 
+                      WHERE contribution.Con_ID = :conID";
+            $sql = $this->conn->prepare($query);
+            $sql->execute(array(':conID' => $conID));
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
 
         public function deleteContribution($id) {

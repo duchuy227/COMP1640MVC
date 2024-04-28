@@ -336,12 +336,7 @@ class AdminModel
         return $errors;
     }
     
-    public function decrypt_password($hashed_password) {
-        // Hàm md5 không thể được giải mã ngược lại, nhưng chúng ta có thể sử dụng một số phương pháp tương đối để giải mã đơn giản như tạo ra một từ điển các giá trị đã biết.
-        // Tuy nhiên, đây không phải là một phương pháp an toàn và không nên được sử dụng trong môi trường thực tế.
-        // Trong ví dụ này, chúng ta đơn giản trả về mật khẩu đã mã hóa MD5 để hiển thị dưới dạng văn bản thô.
-        return md5($hashed_password);
-    }
+    
 
     // End Validate // 
 
