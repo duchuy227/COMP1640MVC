@@ -52,15 +52,31 @@ class AdminController {
                     $imageData = base64_decode($image);                  
                 }
 
+                $password = $_POST['password'];
+                $errors = []; // Tạo mảng lỗi mới
+                if (strlen($password) < 6) {
+                    $errors['password'] = 'Password must have 6 characters';
+                } elseif (!preg_match('/[A-Z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 uppercase character';
+                } elseif (!preg_match('/[a-z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 lowercase character';
+                } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 special character';
+                } elseif (!preg_match('/[\d]/', $password)){
+                    $errors['password'] = 'Password must have at least 1 number';
+                } else {
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                }
+
                 $username = $_POST['username'];
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                
                 $email = $_POST['email'];         
                 $dob = $_POST['dob'];
                 $roleId = $_POST['role_id'];
 
-                $err = $adminModel->validateAdmin($username, $password);
+                $err = $adminModel->validateAdmin($username);
 
-                if(empty($err)){
+                if(empty($errors) && empty($err)){
                     $adminModel->updateAdminAccount($id, $username, $password, $email,  $dob, $roleId, $imageData);
                 //     // Chuyển hướng sau khi cập nhật thành công
                     header('Location: index.php?action=admin');           
@@ -175,18 +191,34 @@ class AdminController {
                     $imageData = file_get_contents($file["tmp_name"]);
                     $imageData = file_get_contents($_FILES["avatar"]["tmp_name"]);
 
-                    }  else{
-                        $imageData=null;
-                    }
+                } else{
+                    $imageData=null;
+                }
+
+                $password = $_POST['password'];
+                $errors = []; // Tạo mảng lỗi mới
+                if (strlen($password) < 6) {
+                    $errors['password'] = 'Password must have 6 characters';
+                } elseif (!preg_match('/[A-Z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 uppercase character';
+                } elseif (!preg_match('/[a-z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 lowercase character';
+                } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 special character';
+                } elseif (!preg_match('/[\d]/', $password)){
+                    $errors['password'] = 'Password must have at least 1 number';
+                } else {
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                }
+
                 $username = $_POST['username'];
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];
                 $dob = $_POST['dob'];
                 $roleId = $_POST['role_id'];
 
-                $err = $adminModel->validateManager('', $username, $password, $email, $dob, $roleId, $imageData,$insert);
+                $err = $adminModel->validateManager('', $username, $email, $dob, $roleId, $imageData,$insert);
 
-                if(empty($err)){
+                if(empty($errors) && empty($err)){
                     $adminModel->addManagerAccount($username, $password, $email, $dob, $roleId,$imageData);
                     header('Location: index.php?action=manager');
                     exit();
@@ -218,26 +250,35 @@ class AdminController {
                     $image = $_POST["avatar"];
                     $imageData = base64_decode($image);                  
                 }
+
+                $password = $_POST['password'];
+                $errors = []; // Tạo mảng lỗi mới
+                if (strlen($password) < 6) {
+                    $errors['password'] = 'Password must have 6 characters';
+                } elseif (!preg_match('/[A-Z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 uppercase character';
+                } elseif (!preg_match('/[a-z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 lowercase character';
+                } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 special character';
+                } elseif (!preg_match('/[\d]/', $password)){
+                    $errors['password'] = 'Password must have at least 1 number';
+                } else {
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                }
+
                 $username = $_POST['username'];
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];         
                 $dob = $_POST['dob'];
                 $roleId = $_POST['role_id'];
 
-                $err = $adminModel->validateManager($id, $username, $password, $email, $dob, $roleId, $imageData, $insert);
+                $err = $adminModel->validateManager($id, $username, $email, $dob, $roleId, $imageData, $insert);
 
-                if(empty($err)){
+                if(empty($errors) && empty($err)){
                     $adminModel->updateManagerAccount($id, $username, $password, $email, $dob, $roleId,$imageData);
                     header('Location: index.php?action=manager');
                     exit();
                 } 
-                // Kiểm tra các trường thông tin không được để trống
-                // $adminModel = new AdminModel();
-                // $adminModel->updateManagerAccount($id, $username, $password, $email,  $dob, $roleId, $imageData);
-        
-                //     // Chuyển hướng sau khi cập nhật thành công
-                // header('Location: index.php?action=manager');
-                // exit();
             } include 'views/admin_edit_manager.php';
         } else {
             header("Location: views/university_index.php");
@@ -260,7 +301,10 @@ class AdminController {
         ob_start();
         if($this->is_login == true && isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) {
             $adminModel = new AdminModel();
-            $faculty = $adminModel->getAllFaculty();
+            $faculty_id = isset($_POST['fa_id']) ? $_POST['fa_id'] : '';
+            $faculty = $adminModel->getFacultyByID($faculty_id);
+
+            $all_faculty = $adminModel->getAllFaculty();
             $insert = true;
             # Xử lý thêm mới student
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -270,28 +314,46 @@ class AdminController {
                 } else {
                     $imageData=null;
                 }
+    
+                $password = $_POST['password'];
+                $errors = []; // Tạo mảng lỗi mới
+                if (strlen($password) < 6) {
+                    $errors['password'] = 'Password must have 6 characters';
+                } elseif (!preg_match('/[A-Z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 uppercase character';
+                } elseif (!preg_match('/[a-z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 lowercase character';
+                } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 special character';
+                } elseif (!preg_match('/[\d]/', $password)){
+                    $errors['password'] = 'Password must have at least 1 number';
+                } else {
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                }
                         
                 $username = $_POST['username'];
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];
                 $fullname = $_POST['fullname'];
                 $dob = $_POST['dob'];
                 $role_Id = $_POST['role_id'];
                 $fa_id = $_POST['fa_id'];
-
-                $err = $adminModel->validateStudent('',$username, $password, $email, $dob, $role_Id, $fullname, $imageData, $fa_id, $insert);
-
-                if(empty($err)){
+                
+    
+                $err = $adminModel->validateStudent('',$username, $email, $dob, $role_Id, $fullname, $imageData, $fa_id, $insert);
+    
+                if(empty($errors) && empty($err)){ // Kiểm tra cả $errors và $err để đảm bảo mật khẩu và dữ liệu sinh viên đều hợp lệ
                     $adminModel->addStudentAccount($username, $password, $email, $fullname, $dob, $role_Id, $fa_id,$imageData);
                     header('Location: index.php?action=student');
                     exit();
                 }
-            }  include 'views/admin_add_student.php'; 
+            }  
+            include 'views/admin_add_student.php'; 
         } else {
             header("Location: views/university_index.php");
         }
         ob_end_flush();
     }
+    
 
 
     public function update_student($id) {
@@ -315,17 +377,32 @@ class AdminController {
                         $image = $_POST["avatar"];
                         $imageData = base64_decode($image);                  
                     }
+                    $password = $_POST['password'];
+                    $errors = []; // Tạo mảng lỗi mới
+                    if (strlen($password) < 6) {
+                        $errors['password'] = 'Password must have 6 characters';
+                    } elseif (!preg_match('/[A-Z]/', $password)) {
+                        $errors['password'] = 'Password must have at least 1 uppercase character';
+                    } elseif (!preg_match('/[a-z]/', $password)) {
+                        $errors['password'] = 'Password must have at least 1 lowercase character';
+                    } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                        $errors['password'] = 'Password must have at least 1 special character';
+                    } elseif (!preg_match('/[\d]/', $password)){
+                        $errors['password'] = 'Password must have at least 1 number';
+                    } else {
+                        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                    }
+
                     $username = $_POST['username'];
-                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                     $email = $_POST['email'];
                     $fullname = $_POST['fullname'];
                     $dob = $_POST['dob'];
                     $roleId = $_POST['role_id'];
                     $fa_id = $_POST['fa_id'];
         
-                    $err = $adminModel->validateStudent($id,$username, $password, $email, $dob, $roleId, $fullname, $imageData, $insert);
+                    $err = $adminModel->validateStudent($id,$username, $email, $dob, $roleId, $fullname, $imageData, $insert);
 
-                    if(empty($err)){
+                    if(empty($errors) && empty($err)){
                         $adminModel->updateStudentAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id,$imageData);
                         header('Location: index.php?action=student');
                         exit();
@@ -359,7 +436,10 @@ class AdminController {
         ob_start();
         if ($this->is_login == true && $_SESSION['role_id'] == 1) {
             $adminModel = new adminModel();
-            $faculty = $adminModel->getAllFaculty();
+            $faculty_id = isset($_POST['fa_id']) ? $_POST['fa_id'] : '';
+            $faculty = $adminModel->getFacultyByID($faculty_id);
+
+            $all_faculty = $adminModel->getAllFaculty();
             $insert = true;
             $err = [];
     
@@ -370,8 +450,24 @@ class AdminController {
                 } else {
                     $imageData = null;
                 }
+
+                $password = $_POST['password'];
+                $errors = []; // Tạo mảng lỗi mới
+                if (strlen($password) < 6) {
+                    $errors['password'] = 'Password must have 6 characters';
+                } elseif (!preg_match('/[A-Z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 uppercase character';
+                } elseif (!preg_match('/[a-z]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 lowercase character';
+                } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                    $errors['password'] = 'Password must have at least 1 special character';
+                } elseif (!preg_match('/[\d]/', $password)){
+                    $errors['password'] = 'Password must have at least 1 number';
+                } else {
+                    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                }
+
                 $username = $_POST['username'];
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = $_POST['email'];
                 $fullname = $_POST['fullname'];
                 $dob = $_POST['dob'];
@@ -382,14 +478,12 @@ class AdminController {
                 $hasCoordinator = $adminModel->checkFacultyHasCoordinator($fa_id);
     
                 if ($hasCoordinator) {
-                    // Hiển thị thông báo lỗi trong view
-                    // Ví dụ: include 'views/error_faculty_has_coordinator.php';
                     $err['faculty_has_coordinator'] = "Faculty này đã có coordinator.";
                 } else {
-                    $err = $adminModel->validateCoordinator("",$username, $password, $email, $dob, $role_Id, $fullname, $imageData, $insert);
+                    $err = $adminModel->validateCoordinator("",$username, $email, $dob, $role_Id, $fullname, $imageData, $insert);
 
                     // Thêm coordinator mới vào database
-                    if(empty($err)){
+                    if(empty($errors) && empty($err)){
                         $adminModel->addCoordinatorAccount($username, $password, $email, $fullname, $dob, $role_Id, $fa_id, $imageData);
                         header('Location: index.php?action=coordinator');
                         exit();
@@ -421,45 +515,56 @@ class AdminController {
                     { 
                         $file = $_FILES["new_avatar"];
                         $imageData = file_get_contents($file["tmp_name"]);          
-                    }
-                else{
+                    } else{
                         $image = $_POST["avatar"];
                         $imageData = base64_decode($image);                  
-                }
-                
-                        $username = $_POST['username'];
+                    }
+
+                    $password = $_POST['password'];
+                    $errors = []; // Tạo mảng lỗi mới
+                    if (strlen($password) < 6) {
+                        $errors['password'] = 'Password must have 6 characters';
+                    } elseif (!preg_match('/[A-Z]/', $password)) {
+                        $errors['password'] = 'Password must have at least 1 uppercase character';
+                    } elseif (!preg_match('/[a-z]/', $password)) {
+                        $errors['password'] = 'Password must have at least 1 lowercase character';
+                    } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+                        $errors['password'] = 'Password must have at least 1 special character';
+                    } elseif (!preg_match('/[\d]/', $password)){
+                        $errors['password'] = 'Password must have at least 1 number';
+                    } else {
                         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                        $email = $_POST['email'];
-                        $fullname = $_POST['fullname'];
-                        $dob = $_POST['dob'];
-                        $roleId = $_POST['role_id'];
-                        $fa_id = $_POST['fa_id'];
+                    }
+                
+                    $username = $_POST['username'];
+                    $email = $_POST['email'];
+                    $fullname = $_POST['fullname'];
+                    $dob = $_POST['dob'];
+                    $roleId = $_POST['role_id'];
+                    $fa_id = $_POST['fa_id'];
 
-                        $err = $adminModel->validateCoordinator($id,$username, $password, $email, $dob, $roleId, $fullname, $imageData, $insert);
+                    $err = $adminModel->validateCoordinator($id,$username, $email, $dob, $roleId, $fullname, $imageData, $insert);
 
-                        if(empty($err)){
-                            $adminModel->updateCoordinatorAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id,$imageData);
-                            header('Location: index.php?action=coordinator');
-                            exit();
-                        }
+                    if(empty($errors) && empty($err)){
+                        $adminModel->updateCoordinatorAccount($id, $username, $password, $email, $fullname, $dob, $roleId, $fa_id,$imageData);
+                        header('Location: index.php?action=coordinator');
+                        exit();
+                    }
                 }include 'views/admin_edit_coordinator.php';
 
                 } else {
                     header("Location: views/university_index.php");
-                    }
+                }
         ob_end_flush();
     }
 
     public function delete_coordinator($id) {
         $adminModel = new AdminModel();
-        
-        // Kiểm tra xem có bình luận nào liên kết với người phối hợp hay không
+
         if ($adminModel->checkCommentsForCoordinator($id)) {
-            // Nếu có, thông báo cho người dùng và không thực hiện việc xóa
             echo "<p style='font-size: 20px'>Cannot delete this coordinator. There are comments associated with this coordinator</p>.<br> <button style='margin-top: 0px; background-color: green; border-radius: 20px; padding: 15px 10px'><a style='text-decoration: none; color: white;' href='index.php?action=coordinator'>List Coordinator</a></button>";
 
         } else {
-            // Nếu không có, thực hiện việc xóa người phối hợp
             $adminModel->deleteCoordinatorAccount($id);
 
             // Chuyển hướng sau khi xóa thành công
@@ -573,10 +678,19 @@ class AdminController {
     public function admin_delete_topic($id){
         if($this->is_login == true && $_SESSION['role_id'] == 1) {
             $adminModel = new AdminModel();
-            $adminModel ->deleteTopic($id);
+            if ($adminModel->topicHasContribution($id)) {
+                echo "<p style='font-size: 20px'>This topic has student contributions, are you sure you want to delete it?.</p><br>
+                <button style='margin-top: 0px; background-color: #2E8B57; border-radius: 20px; padding: 15px 10px; border:none'>
+                <a style='text-decoration: none; color: white; font-size: 20px' href='index.php?action=admin_topic'>List Topics</a>
+                </button>";
 
+            } else {
+            $adminModel->deleteTopic($id);
+
+            // Chuyển hướng sau khi xóa thành công
             header('Location: index.php?action=admin_topic');
             exit();
+        }
         }
     }
 

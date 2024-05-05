@@ -32,7 +32,7 @@ class UserModel{
                 $sql->execute(array(":username" => $username));
                 $result = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($result) {
-                    if (!empty($result) && $result['Stu_Password'] === $password) {
+                    if (!empty($result) && password_verify($password, $result['Stu_Password'])) {
                         return true;
                     } else {
                         return false;

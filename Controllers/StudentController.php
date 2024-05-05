@@ -3,6 +3,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 require_once 'Models/StudentModel.php';
+require_once 'Models/ManagerModel.php';
+require_once 'Models/AdminModel.php';
 require_once 'Controllers/UserController.php';
 use PhpOffice\PhpWord\IOFactory;
 include 'PHPMailer/src/Exception.php';
@@ -19,54 +21,65 @@ include 'PHPMailer/src/SMTP.php';
         }
 
         public function student_add_contribution() {
+            $adminModel = new AdminModel();
+            $topic_id = isset($_POST['Topic_ID']) ? $_POST['Topic_ID'] : '';
+            $faculty = $adminModel->getTopicByFaculty($topic_id);
             $studentModel = new StudentModel();
-            $student= $studentModel -> getStudentbyUserName($_SESSION['username']);
-            if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                
+
+
+            $student = $studentModel->getStudentbyUserName($_SESSION['username']);
+            $errors = [];
+        
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $contributionName = $_POST['Con_Name'];
-            
                 $time = time();
                 $currentTime = $time - (7 * 3600);
                 $submissionDate = date('Y-m-d H:i:s', $currentTime);
                 $status = $_POST['Con_Status'];
                 $studentID = $student['Stu_ID'];
                 $topicID = $_POST['Topic_ID'];
-                $description = strip_tags($_POST['Con_Description']);
-
+        
+                $description = isset($_POST['Con_Description']) ? $_POST['Con_Description'] : '';
+                if (empty($description)) {
+                    $errors['Con_Description'] = "Please fulfill description";
+                } else {
+                    $description = strip_tags($description);
+                }
+        
                 $fa_id = $student['Fa_ID'];
-                $coordinator = $studentModel ->getCoordinatorAndStudentsByFaculty($fa_id);
-                
-                }
-                if(isset($_FILES["Con_Image"]) && !empty($_FILES["Con_Image"]["tmp_name"])){
-                            
+                $coordinator = $studentModel->getCoordinatorAndStudentsByFaculty($fa_id);
+        
+                if (isset($_FILES["Con_Image"]) && !empty($_FILES["Con_Image"]["tmp_name"])) {        
                     $imageData = file_get_contents($_FILES["Con_Image"]["tmp_name"]);
-                    }  else{
-                        $imageData=null;
-                    }
-                    if(isset($_FILES["Con_Doc"]) && !empty($_FILES["Con_Doc"]["tmp_name"])) {
+                } else {
+                    $imageData = null;
+                }
+        
+                if (isset($_FILES["Con_Doc"]) && !empty($_FILES["Con_Doc"]["tmp_name"])) {
                     foreach ($_FILES['Con_Doc']['tmp_name'] as $key => $tmpName) {
-                        // if(isset($_FILES["Con_Doc"]) && !empty($_FILES["Con_Doc"]["tmp_name"][ $key ])) {
-                            $fileName = $_FILES['Con_Doc']['name'][$key];
-                            $temp = $_FILES['Con_Doc']['tmp_name'][$key];
-                            $uploadPath = "Upload/" . $fileName;
-                        // }
-                if (move_uploaded_file($temp, $uploadPath)) {
-                            
-                    $studentModel->addContribution($contributionName, $submissionDate, $status, $studentID, $uploadPath, $imageData, $topicID, $description);
-                    $student= $studentModel->getStudentbyUserName($_SESSION['username']);
-                    $this->mailNotiToCoordinator($student,$submissionDate,$contributionName,$topicID,$uploadPath, $coordinator);
-                    header('location:index.php?action=student_contribution');
+                        $fileName = $_FILES['Con_Doc']['name'][$key];
+                        $temp = $_FILES['Con_Doc']['tmp_name'][$key];
+                        $uploadPath = "Upload/" . $fileName;
+                        
+                        if (move_uploaded_file($temp, $uploadPath)) {
+                            if (empty($errors)) {
+                                $studentModel->addContribution($contributionName, $submissionDate, $status, $studentID, $uploadPath, $imageData, $topicID, $description);
+                                $student = $studentModel->getStudentbyUserName($_SESSION['username']);
+                                $this->mailNotiToCoordinator($student, $submissionDate, $contributionName, $topicID, $uploadPath, $coordinator);
+                                header('Location:index.php?action=student_contribution');
+                                exit(); // Always exit after a header redirect
+                            }
+                        } else {
+                            $errors[] = "Error uploading file.";
+                        }
+                    }
                 }
-                    // echo "File uploaded successfully.";
-                else {
-                    echo "Error uploading file.";
-                }
-            
+            }
+        
+            $topic = $studentModel->getTopic($student["Fa_ID"]);
+            include "views/student_add_contribution.php";
         }
-    }
-        $topic = $studentModel ->getTopic($student["Fa_ID"]);
-        include "views/student_add_contribution.php";
-    }
+        
         
 
 
@@ -452,7 +465,6 @@ include 'PHPMailer/src/SMTP.php';
         } catch (Exception $e) {
             
         }
-    
     }
 
     public function viewdoc($id){
@@ -478,10 +490,7 @@ include 'PHPMailer/src/SMTP.php';
                 }
             }
         }
-    
         include 'views/showDocx.php';
     }
-
-
     }
 ?>

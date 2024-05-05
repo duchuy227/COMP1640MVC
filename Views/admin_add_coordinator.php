@@ -63,8 +63,8 @@
                     </div>
 
                     <?php 
-                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($err['password'])) : ?>
-                        <div class="text-danger"><?php echo $err['password'] ?></div>
+                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($errors['password'])) : ?>
+                        <div class="text-danger"><?php echo $errors['password'] ?></div>
                     <?php endif; ?>
                 </div>
                 <div class="form-group">
@@ -91,13 +91,16 @@
                     <input type="hidden" class="form-control" id="role_id" value="4" name="role_id" required>
                 </div>
                 <div class="form-group">
-                <label for="fa_id">Choose faculty</label>
-
-                    <select name="fa_id" class="form-control">
+                    <label for="fa_id">Choose faculty</label>
+                    <select name="fa_id" class="form-control" required>
+                        <option value="">Choose faculty</option>
                         <?php
-                        foreach($faculty as $fac)
-                        {
-                            echo "  <option value='".$fac['Fa_ID']."'>".$fac['Fa_Name'] ."</option>";
+                        foreach($all_faculty as $fac) {
+                            echo '<option value="'.$fac['Fa_ID'].'"';
+                            if ($fac['Fa_ID'] == $faculty_id) {
+                                echo ' selected';
+                            }
+                            echo '>'.$fac['Fa_Name'].'</option>';
                         }
                         ?>
                     </select>

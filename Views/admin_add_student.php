@@ -7,7 +7,7 @@
     <title>Add Student Account</title>
     <link rel="icon" href="./Image/img.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
         .main--content {
@@ -62,8 +62,8 @@
                         </div>
                     </div>
                     <?php 
-                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($err['password'])) : ?>
-                        <div class="text-danger"><?php echo $err['password'] ?></div>
+                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($errors['password'])) : ?>
+                        <div class="text-danger"><?php echo $errors['password'] ?></div>
                     <?php endif; ?>
                 </div>
                 
@@ -85,22 +85,23 @@
                 </div>
                 <div class="form-group">
                     <label for="dob">Date of Birth</label>
-                    <input type="date" class="form-control" id="dob" name="dob" required>
-                    
-                
+                    <input type="date" class="form-control" id="dob" name="dob" value="<?php echo isset($_POST['dob']) ? $_POST['dob'] : '' ?>"  required>
                 </div>
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="role_id" value="2" name="role_id" >
                 </div>
                 <div class="form-group">
-                <label for="fa_id">Choose faculty</label>
-
+                    <label for="fa_id">Choose faculty</label>
                     <select name="fa_id" class="form-control" required>
+                        <option value="">Choose faculty</option>
                         <?php
-                            foreach($faculty as $fac)
-                            {
-                                echo "  <option value='".$fac['Fa_ID']."'>".$fac['Fa_Name'] ."</option>";
+                        foreach($all_faculty as $fac) {
+                            echo '<option value="'.$fac['Fa_ID'].'"';
+                            if ($fac['Fa_ID'] == $faculty_id) {
+                                echo ' selected';
                             }
+                            echo '>'.$fac['Fa_Name'].'</option>';
+                        }
                         ?>
                     </select>
                 </div>
@@ -117,9 +118,9 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    
     <script>
         document.getElementById('togglePassword').addEventListener('click', function() {
             var passwordInput = document.getElementById('password');

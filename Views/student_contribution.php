@@ -43,10 +43,10 @@
                         href="index.php?action=student_add_contribution"><i class="bi bi-plus-square"></i> Add Contribution</a>
                         </button>
                     </div>
-                        <table class="table table-hover">
-                            <thead >
-                                <tr style="text-align:center" class="table-primary">
-                                    <td style="margin-left: 20px; border:none">Name</td>
+                        <table class="table table-bordered border-bold">
+                            <thead class="thead-dark">
+                                <tr style="text-align:center; background-color:#fec163" class="table bordered">
+                                    <td scope="col">Name</td>
                                     <td scope="col">Description</td>
                                     <td scope="col">Comment</td>
                                     <td scope="col">Status</td>
@@ -55,9 +55,9 @@
                             </thead>
                             <tbody>
                             <?php  foreach($studentContri as $student): ?>
-                                <tr class="table-bordered" style="text-align:center">
+                                <tr class="table-bordered">
                             
-                                    <td style="border:none; margin-left: 20px" scope="row"><?php echo $student['Con_Name'] ?></td>
+                                    <td scope="row"><?php echo $student['Con_Name'] ?></td>
                                     <td scope="row">
                                         <textarea readonly style="border:none; outline:none; background:transparent" cols="30"><?php echo $student['Con_Description'] ?></textarea>
                                     </td>
@@ -71,11 +71,6 @@
                                             <a style="text-decoration: none; color:#fff"  
                                             href="index.php?action=student_update_contribution&id=<?php echo $student['Con_ID'] ?>"><i class="bi bi-pencil-square"></i></a> 
                                         </button>
-
-                                        <!-- <button class="btn btn-danger">
-                                            <a style="text-decoration: none; color:#fff" 
-                                            href="index.php?action=student_delete_contribution&id=<?php echo $student['Con_ID'] ?>" onclick="return confirm('Do you want to delete this contribution')" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
-                                        </button> -->
                                         
                                         <button class="btn btn-primary">
                                             <a style="text-decoration: none; color:#fff"

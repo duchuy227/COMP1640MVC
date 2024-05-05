@@ -28,7 +28,7 @@
                     <h4 style="color: #009879; text-align:center; text-transform:uppercase; margin-bottom: 20px">My Students</h4>
                     <table class="table table-bordered border-bold">
                             <thead class="thead-dark">
-                                <tr style="text-align:center; background-color:#fec163" class="table bordered">
+                                <tr style=" background-color:#fec163" class="table bordered">
                                     <td scope="col">Username</td>
                                     <td scope="col">Email</td>
                                     <td scope="col">FullName</td>
@@ -49,17 +49,6 @@
                                             echo '<img width="100"  src="data:image/*;base64,' . base64_encode($student['Image']) . '" />';
                                         ?>
                                     </td>
-                                    <!-- <td style="padding-top: 40px; padding-left:20px">
-                                        <button class="btn btn-success">
-                                            <a style="text-decoration: none; color:#fff"  
-                                            href="index.php?action=coordinator_edit_student<?php echo $student['Stu_ID']; ?>"><i class="bi bi-pencil-square"></i></a> 
-                                        </button>
-
-                                        <button class="btn btn-danger">
-                                            <a style="text-decoration: none; color:#fff" 
-                                            href="#" onclick="return confirm('Do you want to delete this contribution')"><i class="bi bi-trash"></i></a>
-                                        </button>
-                                    </td> -->
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>

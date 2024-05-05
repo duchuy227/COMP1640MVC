@@ -29,8 +29,8 @@
                     <div class="col-md-12">
                         <input type="Password" name="password" class="form-control" id="inputEmail4" placeholder="Password">
                         <?php 
-                            if($_SERVER["REQUEST_METHOD"] == "POST" && isset($err['password'])) : ?>
-                                <p style="color: red; margin-left: 20px"><?php echo $err['password'] ?></ơ>
+                            if($_SERVER["REQUEST_METHOD"] == "POST" && isset($errors['password'])) : ?>
+                                <p style="color: red; margin-left: 20px"><?php echo $errors['password'] ?></ơ>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                 
                 <div class="form-group" style="margin-bottom: 20px;">
                     <div class="col-md-12">
-                        <input type="date" class="form-control" name="dob" id="inputEmail4" placeholder="Date of Birth" required>
+                        <input type="date" class="form-control" name="dob" id="inputEmail4" placeholder="Date of Birth" value="<?php echo isset($_POST['dob']) ? $_POST['dob'] : '' ?>" required>
                     </div>
                 </div>
                 
@@ -70,16 +70,23 @@
                         border-radius:40px; color:white; font-size: 17px" id="inputState" class="form-control" required>
                             <option hidden require>Choose Faculty</option>
                             <?php
-                            foreach($faculty as $fac)
-                            {
-                                echo "  <option value='".$fac['Fa_ID']."'>".$fac['Fa_Name'] ."</option>";
-                            }
+                                foreach($all_faculty as $fac) {
+                                    echo '<option value="'.$fac['Fa_ID'].'"';
+                                    if ($fac['Fa_ID'] == $faculty_id) {
+                                        echo ' selected';
+                                    }
+                                    echo '>'.$fac['Fa_Name'].'</option>';
+                                }
                             ?>
                         </select>
                     </div>
                 </div>
                 
                 <button type="submit">Register</button>
+
+                <p style="margin-top: 20px; text-align:center; color: #fff">Student already had account?
+                    <a style="color: #fff;" href="index.php?action=login">Login</a>
+                </p>
             </form>
         </div>
     </div>

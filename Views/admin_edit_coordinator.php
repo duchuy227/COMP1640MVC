@@ -61,8 +61,8 @@
                         </div>
                     </div>
                     <?php 
-                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($err['password'])) : ?>
-                        <div class="text-danger"><?php echo $err['password'] ?></div>
+                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($errors['password'])) : ?>
+                        <div class="text-danger"><?php echo $errors['password'] ?></div>
                 <?php endif; ?>
                 </div>
                 <div class="form-group">

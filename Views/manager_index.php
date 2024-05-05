@@ -39,6 +39,7 @@
 	<section id="content">
 		<!-- NAVBAR -->
 		<?php include 'Layout/manager_navbar.php' ?>
+        
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->

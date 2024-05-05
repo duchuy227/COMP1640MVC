@@ -24,10 +24,10 @@
         }
     </style>
 <body>
-    <?php include 'Layout/student_sidebar.php' ?>
+    <?php include 'Layout/coor_sidebar.php' ?>
 
     <section id="content">
-        <?php include 'Layout/student_navbar.php'?>
+        <?php include 'Layout/coor_navbar.php'?>
         <main>
         <div class="head-title">
 				<div class="left">

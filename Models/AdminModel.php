@@ -87,7 +87,7 @@ class AdminModel
 
     // Validate//
 
-    public function validateAdmin($username, $password) {
+    public function validateAdmin($username) {
         $errors = [];
     
         // Validate username
@@ -95,21 +95,10 @@ class AdminModel
             $errors['username'] = 'Username không hợp lệ';
         }
     
-        // Validate password
-        if (strlen($password) < 6) {
-            $errors['password'] = 'Password phải có ít nhất 6 ký tự';
-        } elseif (!preg_match('/[A-Z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái in hoa';
-        } elseif (!preg_match('/[a-z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái viết thường';
-        } elseif (!preg_match('/[\d]/', $password)){
-            $errors['password'] = 'Password phải có ít nhất 1 số';
-        }
-    
         return $errors;
     } 
 
-    public function validateManager($id,$username, $password, $email, $dob, $roleId, $imageData, $insert) {
+    public function validateManager($id,$username, $email, $dob, $roleId, $imageData, $insert) {
         $errors = [];
     
         // Validate username
@@ -120,19 +109,8 @@ class AdminModel
         } elseif ($insert == false && $this->checkManagerExists($username, $id)) {
             $errors['username'] = 'Username đã tồn tại';
         }
-    
-        // Validate password
-        if (strlen($password) < 6) {
-            $errors['password'] = 'Password phải có ít nhất 6 ký tự';
-        } elseif (!preg_match('/[A-Z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái in hoa';
-        } elseif (!preg_match('/[a-z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái viết thường';
-        } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 ký tự đặc biệt';
-        } elseif (!preg_match('/[\d]/', $password)){
-            $errors['password'] = 'Password phải có ít nhất 1 số';
-        }
+
+
 
 
         if($insert == true && $this->checkEmailManagerExists($email)){
@@ -150,7 +128,7 @@ class AdminModel
     }    
     
 
-    public function validateStudent($id, $username, $password, $email, $dob, $roleId, $fullname, $imageData, $insert) {
+    public function validateStudent($id, $username, $email, $dob, $roleId, $fullname, $imageData, $insert) {
         $errors = [];
         if (!preg_match('/^\w{4,10}$/', $username)) {
             $errors['username'] = 'Invalid username';
@@ -161,17 +139,6 @@ class AdminModel
         }
         
     
-        if (strlen($password) < 6) {
-            $errors['password'] = 'Password must have 6 characters';
-        } elseif (!preg_match('/[A-Z]/', $password)) {
-            $errors['password'] = 'Password must have at least 1 uppercase character';
-        } elseif (!preg_match('/[a-z]/', $password)) {
-            $errors['password'] = 'Password must have at least 1 lowercase character';
-        } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-            $errors['password'] = 'Password must have at least 1 special character';
-        } elseif (!preg_match('/[\d]/', $password)){
-            $errors['password'] = 'Password must have at least 1 number';
-        }
 
         if($insert == true && $this->checkEmailStudentExists($email)){
             $errors['email'] = 'Email exsited';
@@ -185,6 +152,8 @@ class AdminModel
             $errors['fullname'] = 'Fullname must include space and character';
         } elseif (preg_match('/[0-9!@#$%^&*(),.?":{}|<>]/', $fullname)) {
             $errors['fullname'] = 'Fullname cannot contain numbers or special characters';
+        } elseif (strlen($fullname) < 6){
+            $errors['fullname'] = 'Fullname must have at least 6 characters';
         }
 
         if (!isset($imageData)) {
@@ -285,7 +254,7 @@ class AdminModel
     }
 
     
-    public function validateCoordinator($id, $username, $password, $email, $dob, $roleId, $fullname, $imageData, $insert) {
+    public function validateCoordinator($id, $username, $email, $dob, $roleId, $fullname, $imageData, $insert) {
         $errors = [];
     
         // Validate username
@@ -296,22 +265,6 @@ class AdminModel
         } elseif ($insert == false && $this->checkCoorExists($username, $id)) {
             $errors['username'] = 'Username đã tồn tại';
         }
-        
-    
-        // Validate password
-        if (strlen($password) < 6) {
-            $errors['password'] = 'Password phải có ít nhất 6 ký tự';
-        } elseif (!preg_match('/[A-Z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái in hoa';
-        } elseif (!preg_match('/[a-z]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 chữ cái viết thường';
-        } elseif (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-            $errors['password'] = 'Password phải có ít nhất 1 ký tự đặc biệt';
-        } elseif (!preg_match('/[\d]/', $password)){
-            $errors['password'] = 'Password phải có ít nhất 1 số';
-        }
-
-        
 
         if($insert == true && $this->checkEmailCoorExists($email)){
             $errors['email'] = 'Email đã tồn tại';
@@ -371,8 +324,15 @@ class AdminModel
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function getAllFaculty()
+    public function getFacultyByID($id)
     {
+        $query = "SELECT * FROM faculty WHERE Fa_ID = :id";
+        $sql = $this->conn->prepare($query);
+        $sql->execute(array(':id' => $id));
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllFaculty(){
         $query = "SELECT * FROM faculty";
         $sql = $this->conn->query($query);
         return $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -480,6 +440,14 @@ class AdminModel
     
         // Nếu có bất kỳ bình luận nào liên kết với người phối hợp, trả về true
         return ($result['COUNT(*)'] > 0);
+    }
+
+    public function topicHasContribution($topic_id) {
+        $sql = "SELECT COUNT(*) AS count FROM Contribution WHERE Topic_ID = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$topic_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'] > 0;
     }
 
 
@@ -609,11 +577,16 @@ class AdminModel
         $sql->execute(array(':id' => $id, ':name' => $name, ':startDate' => $startDate, ':closureDate' => $closureDate, ':finalDate' => $finalDate, ':descriptions' => $descriptions, ':imageData'=>$imageData, ':fa_id' => $fa_id));
     }
 
-    public function deleteTopic($id)
+    public function deleteTopic($topic_id)
     {
-        $query = "DELETE FROM Topic WHERE Topic_ID = :id";
-        $sql = $this->conn->prepare($query);
-        $sql->execute(array(':id' => $id));
+        $sql_delete_comments = "DELETE FROM Comment WHERE Con_ID IN (SELECT Con_ID FROM Contribution WHERE Topic_ID = ?)";
+        $stmt = $this->conn->prepare($sql_delete_comments);
+        $stmt->execute([$topic_id]);
+    
+        // Xóa contribution
+        $sql_delete_contribution = "DELETE FROM Contribution WHERE Topic_ID = ?";
+        $stmt = $this->conn->prepare($sql_delete_contribution);
+        $stmt->execute([$topic_id]);
     }
 
     public function getAllMagazine(){

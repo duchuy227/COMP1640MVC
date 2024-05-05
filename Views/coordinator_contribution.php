@@ -28,7 +28,7 @@
                 <h4 style="color: #009879; text-align:center; text-transform:uppercase; margin-bottom: 20px">List of Contribution</h4>
                     <table class="table table-bordered border-bold">
                             <thead class="thead-dark">
-                                <tr style="text-align:center; background-color:#fec163" class="table bordered">
+                                <tr style="background-color:#fec163" class="table bordered">
                                     <td scope="col">Name</td>
                                     <td scope="col">Description</td>
                                     <td scope="col">Student Name</td>
@@ -39,7 +39,7 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($contribution as $contribution): ?>
-                            <tr class="table bordered" style=" background-color: #d7ede2; text-align:center">
+                            <tr class="table bordered" style=" background-color: #d7ede2;">
                                     <td scope="row"><?php echo $contribution['Con_Name'] ?></td>
                                     <td scope="row">
                                         <textarea readonly style="border:none; background: transparent" cols="30"><?php echo $contribution['Con_Description'] ?></textarea>
@@ -60,7 +60,7 @@
                                             href="index.php?action=coordinator_contribution_detail&id=<?php echo $contribution['Con_ID'] ?>"><i class="bi bi-files"></i></a>
                                         </button>
 
-                                        <?php if ($contribution['Con_Status'] != 'Approval' && $contribution['Con_Status'] != 'Rejected'): ?>
+                                        <?php if ($contribution['Con_Status'] != 'Approval'): ?>
                                         <button class="btn btn-secondary">
                                             <a style="text-decoration: none; color:#fff"  
                                             href="index.php?action=coordinator_add_comment&id=<?php echo $contribution['Con_ID']; ?>"><i class="bi bi-chat-left"></i></a> 

@@ -68,9 +68,9 @@
             <div class="table-data">
 				<div class="order">
                     <h4 style="text-align: center; color: #333">Topic of <?php echo $studentProfile['Fa_Name'] ?></h4>
-                    <table>
-                        <thead>
-                            <tr>
+                    <table class="table table-bordered border-bold">
+                        <thead class="thead-dark"> 
+                            <tr class="table-bordered" style="background-color:#66CCCC">
                                 <td>Name</td>
                                 <td>Start Date</td>
                                 <td>Closure Date</td>
@@ -81,13 +81,15 @@
                         </thead>
                         <tbody>
                         <?php foreach($topic as $topics): ?>
-                            <tr>                             
-                                <td><?php echo $topics['Topic_Name'] ?></td>
-                                <td><?php echo $topics['Topic_StartDate'] ?></td>
-                                <td><?php echo $topics['Topic_ClosureDate'] ?></td>
-                                <td><?php echo $topics['Topic_FinaleDate'] ?></td>
-                                <td><?php echo $topics['Topic_Description'] ?></td>
-                                <td>
+                            <tr class="table-bordered" style=" background-color: #FF9999">                             
+                                <td scope="row"><?php echo $topics['Topic_Name'] ?></td>
+                                <td scope="row"><?php echo $topics['Topic_StartDate'] ?></td>
+                                <td scope="row"><?php echo $topics['Topic_ClosureDate'] ?></td>
+                                <td scope="row"><?php echo $topics['Topic_FinalDate'] ?></td>
+                                <td scope="row">
+                                    <textarea readonly style="background: transparent; border: none" cols="30" name="" id=""><?php echo $topics['Topic_Description'] ?></textarea>
+                                </td>
+                                <td scope="row">
                                     <?php  
                                         echo '<img width="100"  src="data:image/*;base64,' . base64_encode($topics['Topic_Image']) . '" />';
                                     ?>

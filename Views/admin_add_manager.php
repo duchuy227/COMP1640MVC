@@ -62,8 +62,8 @@
                         </div>
                     </div>
                 <?php 
-                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($err['password'])) : ?>
-                        <div class="text-danger"><?php echo $err['password'] ?></div>
+                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($errors['password'])) : ?>
+                        <div class="text-danger"><?php echo $errors['password'] ?></div>
                 <?php endif; ?>
                 
             </div> 
@@ -77,7 +77,7 @@
             </div>
             <div class="form-group">
                 <label for="dob">Date of Birth</label>
-                <input type="date" class="form-control" id="dob" name="dob" required>
+                <input type="date" class="form-control" id="dob" name="dob" value="<?php echo isset($_POST['dob']) ? $_POST['dob'] : '' ?>" required>
             </div>
             <div class="form-group">
                 <input type="hidden" class="form-control" id="role_id" value="3

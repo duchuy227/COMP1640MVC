@@ -77,7 +77,7 @@
                     <form method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="Con_Name">Contribution Name</label>
-                            <input type="text" class="form-control" id="Con_Name" name="Con_Name" required>
+                            <input type="text" class="form-control" id="Con_Name" name="Con_Name" value="<?php echo isset($_POST['Con_Name']) ? $_POST['Con_Name'] : ''?>" required>
                         </div>
                         <div class="form-group">
                         
@@ -91,6 +91,9 @@
                             <script>
                                 CKEDITOR.replace("Con_Description");                              
                             </script>
+                            <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($errors['Con_Description'])) : ?>
+                                <div class="text-danger"><?php echo $errors['Con_Description'] ?></div>
+                            <?php endif; ?>
                         </div>
                         <div class="form-group">
                             <label for="Con_Doc">Document</label>
@@ -104,9 +107,15 @@
                             <label for="cars">Choose Topic:</label>
                             
                             <select class="form-control" name="Topic_ID" >
-                                <?php foreach ($topic as $topics) : ?>
-                                <option value="<?php echo $topics['Topic_ID'] ?>"> <?php echo $topics['Topic_Name'] ?> </option>
-                                <?php endforeach ; ?>
+                            <?php
+                        foreach($topic as $topics) {
+                            echo '<option value="'.$topics['Topic_ID'].'"';
+                            if ($topics['Topic_ID'] == $topic_id) {
+                                echo ' selected';
+                            }
+                            echo '>'.$topics['Topic_Name'].'</option>';
+                        }
+                        ?>
                             </select>
                         </div>
 
